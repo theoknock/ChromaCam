@@ -9,13 +9,12 @@
 
 #import "UIView+AVCaptureVideoPreviewLayer.h"
 
-@interface ViewController : UIViewController
-
-@property (strong, nonatomic) AVCaptureSession * captureSession;
+@interface ViewController : UIViewController <UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView * captureVideoPreview;
 @property (weak, nonatomic) IBOutlet UIView *scrollViewControl;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIView *scrollViewSlider;
 
 @end
 

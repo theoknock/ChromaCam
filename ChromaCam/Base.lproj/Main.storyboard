@@ -87,6 +87,9 @@
                                                 </constraints>
                                                 <viewLayoutGuide key="contentLayoutGuide" id="Fvh-Eq-1hg"/>
                                                 <viewLayoutGuide key="frameLayoutGuide" id="Wne-Gy-rFN"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="BYZ-38-t0r" id="DTw-FW-ULl"/>
+                                                </connections>
                                             </scrollView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemGray2Color"/>
@@ -136,6 +139,7 @@
                         <outlet property="captureVideoPreview" destination="scO-X4-Tlv" id="RcB-hK-JZH"/>
                         <outlet property="scrollView" destination="v7M-va-8Vf" id="n6V-kf-i6E"/>
                         <outlet property="scrollViewControl" destination="qO4-MJ-UTY" id="228-X1-bag"/>
+                        <outlet property="scrollViewSlider" destination="lNW-f4-Qvd" id="cLK-4U-4jA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
