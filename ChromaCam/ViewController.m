@@ -6,6 +6,15 @@
 //
 
 #import "ViewController.h"
+#import "CaptureSessionConfigurationQueue.h"
+
+typedef enum : NSUInteger {
+    CaptureDevicePropertyTorchLevel,
+    CaptureDevicePropertyLensPosition,
+    CaptureDevicePropertyExposureDuration,
+    CaptureDevicePropertyISO,
+    CaptureDevicePropertyZoomFactor
+} CaptureDeviceProperty;
 
 @interface ViewController ()
 {
@@ -15,11 +24,14 @@
     AVCaptureConnection  * captureConnection;
     
     void (^configureCameraProperty)(float);
+    // add a block that executes when these properties are first initialized to set the scroll view offset to the current property value equivalent
     void (^setLensPosition)(float);
     void (^setZoomFactor)(float);
     void (^setExposureDuration)(float);
     void (^setISO)(float);
     void (^setTorchLevel)(float);
+    
+    void (^setScrollViewOffset)(float(^normalizedCameraPropertyValue)(void));
 }
 
 @end
@@ -39,19 +51,19 @@ static float scale(float unscaledNum, float minAllowed, float maxAllowed, float 
 static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger tag) {
     NSString * systemImageName = nil;
     switch (tag) {
-        case 0:
+        case CaptureDevicePropertyTorchLevel:
             systemImageName = @"bolt.circle";
             break;
-        case 1:
+        case CaptureDevicePropertyLensPosition:
             systemImageName = @"viewfinder.circle";
             break;
-        case 2:
+        case CaptureDevicePropertyExposureDuration:
             systemImageName = @"timer";
             break;
-        case 3:
+        case CaptureDevicePropertyISO:
             systemImageName = @"camera.aperture";
             break;
-        case 4:
+        case CaptureDevicePropertyZoomFactor:
             systemImageName = @"magnifyingglass.circle";
             break;
         
@@ -109,58 +121,9 @@ static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger
     [captureSession commitConfiguration];
     [captureSession startRunning];
     
-    setZoomFactor = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
-        return ^ void (float x) {
-            float value = scale(x, range_min, range_max, min_x, max_x);
-            [cd setVideoZoomFactor:MAX(range_min, MIN(value, range_max))];
-        };
-    }(captureDevice, 1.0, captureDevice.activeFormat.videoMaxZoomFactor, 0.0, CGRectGetWidth(self.scrollView.bounds));
-    
-    setLensPosition = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
-        return ^ void (float x) {
-            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-            [cd setFocusModeLockedWithLensPosition:value completionHandler:nil];
-        };
-    }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
-    
-    setExposureDuration = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
-        double minDurationSeconds = 1.0/1000.0;
-        double maxDurationSeconds = 1.0/3.0;
-        
-        return ^ void (float x) {
-            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-            double p = pow(value, 5.0);
-            double seconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;
-            CMTime exposureDurationValue = CMTimeMakeWithSeconds(seconds, 1000*1000*1000);
-            [cd setExposureModeCustomWithDuration:exposureDurationValue ISO:AVCaptureISOCurrent completionHandler:nil];
-        };
-    }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
-    
-    setISO = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
-        return ^ void (float x) {
-            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-            [cd setExposureModeCustomWithDuration:AVCaptureExposureDurationCurrent ISO:value completionHandler:nil];
-        };
-    }(captureDevice, captureDevice.activeFormat.minISO, captureDevice.activeFormat.maxISO, 0.0, CGRectGetWidth(self.scrollView.bounds));
-    
-    setTorchLevel = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
-        return ^ void (float x) {
-            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-            if (value != 0.0 && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious))
-                [cd setTorchModeOnWithLevel:value error:nil];
-            else
-                [cd setTorchMode:AVCaptureTorchModeOff];
-        };
-    }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
-    
-    configureCameraProperty = ^ (void(^cameraPropertySetter)(float)) {
-        return ^ void (float x) {
-            cameraPropertySetter(x);
-        };
-    }(setExposureDuration);
+    [self setCameraProperty:self.lensPositionButton];
 }
 - (IBAction)setCameraProperty:(id)sender {
-    printf("sender.tag == %lu", ((UIButton *)sender).tag);
     dispatch_async(dispatch_get_main_queue(), ^{
         for (UIButton * button in self.cameraControlButtons)
         {
@@ -174,24 +137,64 @@ static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger
         NSInteger tag = [sender tag];
         void(^cameraPropertyConfiguration)(float) = nil;
         switch (tag) {
-            case 0: {
-                cameraPropertyConfiguration = setTorchLevel;
+            case CaptureDevicePropertyTorchLevel: {
+                cameraPropertyConfiguration = ^(UIScrollView * scrollView, AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
+                    float current_value = scale([cd torchLevel], 0.0, CGRectGetWidth(self.scrollView.bounds), 0.0, 1.0);
+                    CGPoint scrollViewContentOffset = CGPointMake(current_value, scrollView.contentOffset.y);
+                    [scrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+                    return ^ void (float x) {
+                        float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+                        if (value != 0.0 && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious))
+                            [cd setTorchModeOnWithLevel:value error:nil];
+                        else
+                            [cd setTorchMode:AVCaptureTorchModeOff];
+                    };
+                }(self.scrollView, captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
                 break;
             }
-            case 1: {
-                cameraPropertyConfiguration = setLensPosition;
+            case CaptureDevicePropertyLensPosition: {
+                cameraPropertyConfiguration = ^(UIScrollView * scrollView, AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
+                    float current_value = scale([cd lensPosition], 0.0, CGRectGetWidth(self.scrollView.bounds), 0.0, 1.0);
+                    CGPoint scrollViewContentOffset = CGPointMake(current_value, scrollView.contentOffset.y);
+                    [scrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+                    return ^ void (float x) {
+                        float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+                        [cd setFocusModeLockedWithLensPosition:value completionHandler:nil];
+                    };
+                }(self.scrollView, captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));;
                 break;
             }
-            case 2: {
-                cameraPropertyConfiguration = setExposureDuration;
+            case CaptureDevicePropertyExposureDuration: {
+                cameraPropertyConfiguration = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
+                    double minDurationSeconds = 1.0/1000.0;
+                    double maxDurationSeconds = 1.0/3.0;
+                    
+                    return ^ void (float x) {
+                        float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+                        double p = pow(value, 5.0);
+                        double seconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;
+                        CMTime exposureDurationValue = CMTimeMakeWithSeconds(seconds, 1000*1000*1000);
+                        [cd setExposureModeCustomWithDuration:exposureDurationValue ISO:AVCaptureISOCurrent completionHandler:nil];
+                    };
+                }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
                 break;
             }
-            case 3: {
-                cameraPropertyConfiguration = setISO;
+            case CaptureDevicePropertyISO: {
+                cameraPropertyConfiguration = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
+                    return ^ void (float x) {
+                        float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+                        [cd setExposureModeCustomWithDuration:AVCaptureExposureDurationCurrent ISO:value completionHandler:nil];
+                    };
+                }(captureDevice, captureDevice.activeFormat.minISO, captureDevice.activeFormat.maxISO, 0.0, CGRectGetWidth(self.scrollView.bounds));
                 break;
             }
-            case 4: {
-                cameraPropertyConfiguration = setZoomFactor;
+            case CaptureDevicePropertyZoomFactor: {
+                cameraPropertyConfiguration = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
+                    return ^ void (float x) {
+                        float value = scale(x, range_min, range_max, min_x, max_x);
+                        [cd setVideoZoomFactor:MAX(range_min, MIN(value, range_max))];
+                    };
+                }(captureDevice, 1.0, captureDevice.activeFormat.videoMaxZoomFactor, 0.0, CGRectGetWidth(self.scrollView.bounds));;
                 break;
             }
             default:
@@ -200,7 +203,9 @@ static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger
         
         configureCameraProperty = ^ (void(^cameraPropertySetter)(float)) {
             return ^ void (float x) {
-                cameraPropertySetter(x);
+                dispatch_async(capture_session_configuration_queue_ref(), ^{
+                    cameraPropertySetter(x);
+                });
             };
         }(cameraPropertyConfiguration);
     });
