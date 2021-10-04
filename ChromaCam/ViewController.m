@@ -15,12 +15,33 @@
     AVCaptureConnection  * captureConnection;
     
     void (^configureCameraProperty)(float);
+    void (^setLensPosition)(float);
     void (^setZoomFactor)(float);
+    void (^setExposureDuration)(float);
 }
 
 @end
 
 @implementation ViewController
+
+static float scale(float unscaledNum, float minAllowed, float maxAllowed, float min, float max) {
+    return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
+}
+
+static float (^exposureDurationSliderValue)(AVCaptureDevice *, float) = ^ float (AVCaptureDevice * video_device, float x) {
+    double minDurationSeconds = CMTimeGetSeconds(video_device.activeFormat.minExposureDuration);
+    double maxDurationSeconds = 1.0/3.0;                                                                // vs. CMTimeGetSeconds(self.videoDevice.activeFormat.maxExposureDuration);
+    double p = pow(x, 5.0);                             // Apply power function to expand slider's low-end range
+    double newDurationSeconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;    // Scale from 0-1 slider range to actual duration
+    
+    return newDurationSeconds;
+};
+
+static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
+    CMTime exposureDurationValue = CMTimeMakeWithSeconds(seconds, 1000*1000*1000);
+    
+    return exposureDurationValue;
+};
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -42,19 +63,31 @@
     
     setZoomFactor = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
         return ^ void (float x) {
-                float value = normalize(x, range_min, range_max, min_x, max_x);
+                float value = scale(x, range_min, range_max, min_x, max_x);
                 [cd setVideoZoomFactor:MAX(range_min, MIN(value, range_max))];
             };
     }(captureDevice, 1.0, captureDevice.activeFormat.videoMaxZoomFactor, 0.0, CGRectGetWidth(self.scrollView.bounds));
+    
+    setLensPosition = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
+        return ^ void (float x) {
+            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+            [cd setFocusModeLockedWithLensPosition:value completionHandler:nil];
+        };
+    }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
+    
+    setExposureDuration = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
+        double minDurationSeconds = 1.0/1000.0; // CMTimeGetSeconds(cd.activeFormat.minExposureDuration);
+        double maxDurationSeconds = 1.0/3.0;                                                                // vs. CMTimeGetSeconds(self.videoDevice.activeFormat.maxExposureDuration);
+        
+        return ^ void (float x) {
+            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+            double p = pow(value, 5.0);                             // Apply power function to expand slider's low-end range
+            double seconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;    // Scale from 0-1 slider range to actual duration
+            CMTime exposureDurationValue = CMTimeMakeWithSeconds(seconds, 1000*1000*1000);
+            [cd setExposureModeCustomWithDuration:exposureDurationValue ISO:AVCaptureISOCurrent completionHandler:nil];
+        };
+    }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
 }
-
-float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min, float max) {
-    return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
-}
-
-typedef void (^SetCameraProperty)(float);
-
-
 
 - (IBAction)setCameraProperty:(UIButton *)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -66,25 +99,39 @@ typedef void (^SetCameraProperty)(float);
         [(UIButton *)sender setSelected:TRUE ];
         [(UIButton *)sender setHighlighted:TRUE];
         
-        NSInteger tag = 2;
+        NSInteger tag = [sender tag];
+        void(^cameraPropertyConfiguration)(float) = nil;
         switch (tag) {
+            case 0: {
+                cameraPropertyConfiguration = setZoomFactor;
+                break;
+            }
+            case 1: {
+                cameraPropertyConfiguration = setZoomFactor;
+                break;
+            }
             case 2: {
-                configureCameraProperty = ^ (SetCameraProperty cameraPropertySetter) {
-                    return ^ void (float x) {
-                        cameraPropertySetter(x);
-                    };
-                }(setZoomFactor);
+                cameraPropertyConfiguration = setExposureDuration;
+                break;
+            }
+            case 3: {
+                cameraPropertyConfiguration = setZoomFactor;
+                break;
+            }
+            case 4: {
+                cameraPropertyConfiguration = setLensPosition;
                 break;
             }
             default:
                 break;
         }
+        
+        configureCameraProperty = ^ (void(^cameraPropertySetter)(float)) {
+            return ^ void (float x) {
+                cameraPropertySetter(x);
+            };
+        }(cameraPropertyConfiguration);
     });
-    
-    // To-Do: Create a block to configure each camera property; set the constant variables only once
-    //        Create a global block property that takes the camera property configuration block associated
-    //        with the selected button
-    //        Pass the camera property configuration block to the global block property and execute it in scrollViewDidScroll
 }
 
 
@@ -92,17 +139,6 @@ typedef void (^SetCameraProperty)(float);
 {
     [captureDevice lockForConfiguration:nil];
 }
-
-static float(^scaleSliderValue)(CGRect, CGFloat, float, float) = ^float(CGRect scrollViewFrame, CGFloat contentOffsetX, float scaleMinimum, float scaleMaximum)
-{
-    CGFloat frameMinX  = -(CGRectGetMidX(scrollViewFrame));
-    CGFloat frameMaxX  =  CGRectGetMaxX(scrollViewFrame) + fabs(CGRectGetMidX(scrollViewFrame));
-    contentOffsetX     =  (contentOffsetX < frameMinX) ? frameMinX : ((contentOffsetX > frameMaxX) ? frameMaxX : contentOffsetX);
-    float slider_value =  normalize(contentOffsetX, 0.0, 1.0, frameMinX, frameMaxX);
-    slider_value       =  (slider_value < 0.0) ? 0.0 : (slider_value > 1.0) ? 1.0 : slider_value;
-    
-    return slider_value;
-};
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
