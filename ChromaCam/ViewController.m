@@ -50,7 +50,6 @@ static float scale(float unscaledNum, float minAllowed, float maxAllowed, float 
     
     setZoomFactor = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
         return ^ void (float x) {
-            if (![cd isRampingVideoZoom]) [cd cancelVideoZoomRamp];
             float value = scale(x, range_min, range_max, min_x, max_x);
             [cd setVideoZoomFactor:MAX(range_min, MIN(value, range_max))];
         };
@@ -58,10 +57,8 @@ static float scale(float unscaledNum, float minAllowed, float maxAllowed, float 
     
     setLensPosition = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
         return ^ void (float x) {
-            if (![cd isAdjustingFocus]) {
-                float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-                [cd setFocusModeLockedWithLensPosition:value completionHandler:nil];
-            }
+            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+            [cd setFocusModeLockedWithLensPosition:value completionHandler:nil];
         };
     }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
     
@@ -70,13 +67,11 @@ static float scale(float unscaledNum, float minAllowed, float maxAllowed, float 
         double maxDurationSeconds = 1.0/3.0;
         
         return ^ void (float x) {
-            if (![cd isAdjustingExposure]) {
-                float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-                double p = pow(value, 5.0);
-                double seconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;
-                CMTime exposureDurationValue = CMTimeMakeWithSeconds(seconds, 1000*1000*1000);
-                [cd setExposureModeCustomWithDuration:exposureDurationValue ISO:AVCaptureISOCurrent completionHandler:nil];
-            }
+            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+            double p = pow(value, 5.0);
+            double seconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;
+            CMTime exposureDurationValue = CMTimeMakeWithSeconds(seconds, 1000*1000*1000);
+            [cd setExposureModeCustomWithDuration:exposureDurationValue ISO:AVCaptureISOCurrent completionHandler:nil];
         };
     }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
     
@@ -90,7 +85,7 @@ static float scale(float unscaledNum, float minAllowed, float maxAllowed, float 
     setTorchLevel = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
         return ^ void (float x) {
             float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-            if (value != 0)
+            if (value != 0.0 && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious))
                 [cd setTorchModeOnWithLevel:value error:nil];
             else
                 [cd setTorchMode:AVCaptureTorchModeOff];
