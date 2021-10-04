@@ -19,6 +19,7 @@
     void (^setZoomFactor)(float);
     void (^setExposureDuration)(float);
     void (^setISO)(float);
+    void (^setTorchLevel)(float);
 }
 
 @end
@@ -95,6 +96,18 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
             [cd setExposureModeCustomWithDuration:AVCaptureExposureDurationCurrent ISO:value completionHandler:nil];
         };
     }(captureDevice, captureDevice.activeFormat.minISO, captureDevice.activeFormat.maxISO, 0.0, CGRectGetWidth(self.scrollView.bounds));
+    
+    setTorchLevel = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
+        return ^ void (float x) {
+            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+//            value = MAX(0.0, MIN(scale(value, range_min, range_max, 0.0, 1.0), 1.0));
+            if (value != 0)
+                [captureDevice setTorchModeOnWithLevel:value error:nil];
+            else
+                [captureDevice setTorchMode:AVCaptureTorchModeOff];
+        };
+    }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
+    
 }
 
 - (IBAction)setCameraProperty:(UIButton *)sender {
@@ -111,7 +124,7 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
         void(^cameraPropertyConfiguration)(float) = nil;
         switch (tag) {
             case 0: {
-                cameraPropertyConfiguration = setZoomFactor;
+                cameraPropertyConfiguration = setTorchLevel;
                 break;
             }
             case 1: {
