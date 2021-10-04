@@ -18,6 +18,7 @@
     void (^setLensPosition)(float);
     void (^setZoomFactor)(float);
     void (^setExposureDuration)(float);
+    void (^setISO)(float);
 }
 
 @end
@@ -76,17 +77,24 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
     }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
     
     setExposureDuration = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
-        double minDurationSeconds = 1.0/1000.0; // CMTimeGetSeconds(cd.activeFormat.minExposureDuration);
-        double maxDurationSeconds = 1.0/3.0;                                                                // vs. CMTimeGetSeconds(self.videoDevice.activeFormat.maxExposureDuration);
+        double minDurationSeconds = 1.0/1000.0;
+        double maxDurationSeconds = 1.0/3.0;
         
         return ^ void (float x) {
             float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-            double p = pow(value, 5.0);                             // Apply power function to expand slider's low-end range
-            double seconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;    // Scale from 0-1 slider range to actual duration
+            double p = pow(value, 5.0);
+            double seconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;
             CMTime exposureDurationValue = CMTimeMakeWithSeconds(seconds, 1000*1000*1000);
             [cd setExposureModeCustomWithDuration:exposureDurationValue ISO:AVCaptureISOCurrent completionHandler:nil];
         };
     }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
+    
+    setISO = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
+        return ^ void (float x) {
+            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+            [cd setExposureModeCustomWithDuration:AVCaptureExposureDurationCurrent ISO:value completionHandler:nil];
+        };
+    }(captureDevice, captureDevice.activeFormat.minISO, captureDevice.activeFormat.maxISO, 0.0, CGRectGetWidth(self.scrollView.bounds));
 }
 
 - (IBAction)setCameraProperty:(UIButton *)sender {
@@ -115,7 +123,7 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
                 break;
             }
             case 3: {
-                cameraPropertyConfiguration = setZoomFactor;
+                cameraPropertyConfiguration = setISO;
                 break;
             }
             case 4: {
