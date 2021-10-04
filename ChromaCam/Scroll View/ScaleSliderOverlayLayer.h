@@ -14,10 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ScaleSliderOverlayLayer : CALayer
 
-- (instancetype)initWithMeasureIndicatorHorizontalOffset:(double)measurementIndicatorHorizontalOffset;
-
-@property (assign, setter=setMeasurementIndicatorHorizontalOffset:) double measurementIndicatorHorizontalOffset;
-
 @end
 
 NS_ASSUME_NONNULL_END

@@ -8,32 +8,87 @@
 
 #import "ScaleSliderOverlayLayer.h"
 
+#import <QuartzCore/QuartzCore.h>
+#import <CoreText/CoreText.h>
+
+
 @implementation ScaleSliderOverlayLayer
-
-@synthesize measurementIndicatorHorizontalOffset = _measurementIndicatorHorizontalOffset;
-
-- (double)measurementIndicatorHorizontalOffset
 {
-    return self->_measurementIndicatorHorizontalOffset;
+    CATextLayer *scaleSliderValueTextLayer;
+    CATextLayer *scaleSliderMinimumValueTextLayer;
+    CATextLayer *scaleSliderMaximumValueTextLayer;
 }
 
-- (void)setMeasurementIndicatorHorizontalOffset:(double)measurementIndicatorHorizontalOffset
+- (instancetype)init
 {
-    self->_measurementIndicatorHorizontalOffset = measurementIndicatorHorizontalOffset;
-    [self display];
-//    //NSLog(@"measurementIndicatorHorizontalOffset %f", measurementIndicatorHorizontalOffset);
-}
-
-- (instancetype)initWithMeasureIndicatorHorizontalOffset:(double)measurementIndicatorHorizontalOffset
-{
-    self = [super init];
-    
-    if (self)
-    {
-        [self setMeasurementIndicatorHorizontalOffset:measurementIndicatorHorizontalOffset];
+    if (self == [super init]) {        
+        scaleSliderValueTextLayer = [CATextLayer new];
+        [self attributesForTextLayer:scaleSliderValueTextLayer];
+        [self addSublayer:scaleSliderValueTextLayer];
+        [self setText:@"0.5" forLayer:scaleSliderValueTextLayer frameWithOffset:CGRectGetMidX([[UIScreen mainScreen] bounds])];
+        
+        scaleSliderMinimumValueTextLayer = [CATextLayer new];
+        [self attributesForTextLayer:scaleSliderMinimumValueTextLayer];
+        [self addSublayer:scaleSliderMinimumValueTextLayer];
+        [self setText:@"0.0" forLayer:scaleSliderMinimumValueTextLayer frameWithOffset:0];
+        
+        scaleSliderMaximumValueTextLayer = [CATextLayer new];
+        [self attributesForTextLayer:scaleSliderMaximumValueTextLayer];
+        [self addSublayer:scaleSliderMaximumValueTextLayer];
+        [self setText:@"1.0" forLayer:scaleSliderMaximumValueTextLayer frameWithOffset:[[UIScreen mainScreen] bounds].size.width];
+        
+        [self setNeedsDisplay];
+        [self setNeedsDisplayOnBoundsChange:YES];
     }
     
     return self;
+}
+
+- (void)setText:(NSString *)valueString forLayer:(CATextLayer *)textLayer frameWithOffset:(CGFloat)originX {
+    NSLog(@"%f", originX);
+    [textLayer setContentsScale:[[UIScreen mainScreen] nativeScale]];
+    [textLayer setRasterizationScale:[[UIScreen mainScreen] nativeScale]];
+    NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+    centerAlignedParagraphStyle.alignment = NSTextAlignmentCenter;
+    NSDictionary *centerAlignedTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],
+                                                  NSFontAttributeName:[UIFont systemFontOfSize:14.0 weight:UIFontWeightLight],
+                                                  NSParagraphStyleAttributeName:centerAlignedParagraphStyle};
+    
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:valueString attributes:centerAlignedTextAttributes];
+    ((CATextLayer *)textLayer).string = attributedString;
+
+    CGSize textLayerframeSize = [self suggestFrameSizeWithConstraints:self.frame.size forAttributedString:attributedString];
+    CGRect textLayerFrame = CGRectMake(originX - (textLayerframeSize.width * 0.5), textLayerframeSize.height + (textLayerframeSize.height / 2.0), textLayerframeSize.width, textLayerframeSize.height);
+    [(CATextLayer *)textLayer setFrame:textLayerFrame];
+    [textLayer display];
+}
+
+- (void)attributesForTextLayer:(CATextLayer *)textLayer
+{
+    [(CATextLayer *)textLayer setAllowsFontSubpixelQuantization:TRUE];
+    [(CATextLayer *)textLayer setOpaque:FALSE];
+    [(CATextLayer *)textLayer setAlignmentMode:kCAAlignmentCenter];
+    [(CATextLayer *)textLayer setWrapped:FALSE];
+//    [(CATextLayer *)textLayer setBorderWidth:1.0];
+//    [(CATextLayer *)textLayer setBorderColor:[UIColor redColor].CGColor];
+//    [self setBorderWidth:1.0];
+//    [self setBorderColor:[UIColor redColor].CGColor];
+    
+}
+
+- (CGFloat)inset
+{
+    return 0.0;//fabs(CGRectGetMidX(self.frame) - CGRectGetMinX(self.frame));
+}
+
+- (CGSize)suggestFrameSizeWithConstraints:(CGSize)size forAttributedString:(NSAttributedString *)attributedString
+{
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFMutableAttributedStringRef)attributedString);
+    CFRange attributedStringRange = CFRangeMake(0, attributedString.length);
+    CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, attributedStringRange, NULL, size, NULL);
+    CFRelease(framesetter);
+    
+    return suggestedSize;
 }
 
 - (CGColorRef)backgroundColor
@@ -48,18 +103,32 @@
 
 - (void)drawInContext:(CGContextRef)ctx
 {
-//    //NSLog(@"drawInContext %f", _measurementIndicatorHorizontalOffset);
     CGRect bounds = [self bounds];
     CGContextTranslateCTM(ctx, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
 
+    CGFloat stepSize = (CGRectGetMaxX(bounds) / 100.0);
     CGFloat height_eighth = (CGRectGetHeight(bounds) / 8.0);
-    CGFloat height_thirtyseconth = (CGRectGetHeight(bounds) / 16.0);
-    CGContextSetStrokeColorWithColor(ctx, [[UIColor yellowColor] CGColor]);
-    CGContextSetLineWidth(ctx, 2.0);
-//    //NSLog(@"measurementIndicatorHorizontalOffset %f", _measurementIndicatorHorizontalOffset);
-    CGContextMoveToPoint(ctx, _measurementIndicatorHorizontalOffset /*CGRectGetMidX(bounds)*/, (CGRectGetMinY(bounds) + height_eighth) - height_thirtyseconth);
-    CGContextAddLineToPoint(ctx, _measurementIndicatorHorizontalOffset /*CGRectGetMidX(bounds)*/, (CGRectGetMidY(bounds) - height_eighth) - height_thirtyseconth);
+    CGFloat height_sixteenth = (CGRectGetHeight(bounds) / 16.0);
+    CGFloat height_thirtysecond = (CGRectGetHeight(bounds) / 32.0);
+    for (int t = 0; t <= 100; t++) {
+        CGFloat x = (CGRectGetMinX(bounds) + (stepSize * t));
+        if (t % 10 == 0)
+        {
+            CGContextSetStrokeColorWithColor(ctx, [[UIColor whiteColor] CGColor]);
+            CGContextSetLineWidth(ctx, 0.625);
+            CGContextMoveToPoint(ctx, x, (CGRectGetMinY(bounds) + height_eighth) - height_thirtysecond);
+            CGContextAddLineToPoint(ctx, x, (CGRectGetMidY(bounds) - height_eighth) - height_thirtysecond);
+        }
+        else
+        {
+            CGContextSetStrokeColorWithColor(ctx, [[UIColor lightGrayColor] CGColor]);
+            CGContextSetLineWidth(ctx, 0.375);
+            CGContextMoveToPoint(ctx, x, (CGRectGetMinY(bounds) + (height_eighth + height_sixteenth)) - height_thirtysecond);
+            CGContextAddLineToPoint(ctx, x, (CGRectGetMidY(bounds) - (height_eighth + height_sixteenth)) - height_thirtysecond);
+        }
+        
         CGContextStrokePath(ctx);
+    }
 }
 
 @end

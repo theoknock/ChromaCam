@@ -8,12 +8,11 @@
 #import "ScrollViewSlider.h"
 #import "ScaleSliderOverlayLayer.h"
 
-@implementation ScrollViewSlider
+#import <QuartzCore/QuartzCore.h>
+#import <CoreText/CoreText.h>
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    [(ScaleSliderOverlayLayer *)self.layer setMeasurementIndicatorHorizontalOffset:0];
-}
+
+@implementation ScrollViewSlider
 
 + (Class)layerClass
 {
@@ -22,6 +21,13 @@
 
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    [(ScaleSliderOverlayLayer *)self.layer display];
 }
 
 @end

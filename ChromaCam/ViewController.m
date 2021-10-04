@@ -30,21 +30,6 @@ static float scale(float unscaledNum, float minAllowed, float maxAllowed, float 
     return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
 }
 
-static float (^exposureDurationSliderValue)(AVCaptureDevice *, float) = ^ float (AVCaptureDevice * video_device, float x) {
-    double minDurationSeconds = CMTimeGetSeconds(video_device.activeFormat.minExposureDuration);
-    double maxDurationSeconds = 1.0/3.0;                                                                // vs. CMTimeGetSeconds(self.videoDevice.activeFormat.maxExposureDuration);
-    double p = pow(x, 5.0);                             // Apply power function to expand slider's low-end range
-    double newDurationSeconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;    // Scale from 0-1 slider range to actual duration
-    
-    return newDurationSeconds;
-};
-
-static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
-    CMTime exposureDurationValue = CMTimeMakeWithSeconds(seconds, 1000*1000*1000);
-    
-    return exposureDurationValue;
-};
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -65,15 +50,18 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
     
     setZoomFactor = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
         return ^ void (float x) {
-                float value = scale(x, range_min, range_max, min_x, max_x);
-                [cd setVideoZoomFactor:MAX(range_min, MIN(value, range_max))];
-            };
+            if (![cd isRampingVideoZoom]) [cd cancelVideoZoomRamp];
+            float value = scale(x, range_min, range_max, min_x, max_x);
+            [cd setVideoZoomFactor:MAX(range_min, MIN(value, range_max))];
+        };
     }(captureDevice, 1.0, captureDevice.activeFormat.videoMaxZoomFactor, 0.0, CGRectGetWidth(self.scrollView.bounds));
     
     setLensPosition = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
         return ^ void (float x) {
-            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-            [cd setFocusModeLockedWithLensPosition:value completionHandler:nil];
+            if (![cd isAdjustingFocus]) {
+                float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+                [cd setFocusModeLockedWithLensPosition:value completionHandler:nil];
+            }
         };
     }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
     
@@ -82,11 +70,13 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
         double maxDurationSeconds = 1.0/3.0;
         
         return ^ void (float x) {
-            float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-            double p = pow(value, 5.0);
-            double seconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;
-            CMTime exposureDurationValue = CMTimeMakeWithSeconds(seconds, 1000*1000*1000);
-            [cd setExposureModeCustomWithDuration:exposureDurationValue ISO:AVCaptureISOCurrent completionHandler:nil];
+            if (![cd isAdjustingExposure]) {
+                float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
+                double p = pow(value, 5.0);
+                double seconds = p * ( maxDurationSeconds - minDurationSeconds) + minDurationSeconds;
+                CMTime exposureDurationValue = CMTimeMakeWithSeconds(seconds, 1000*1000*1000);
+                [cd setExposureModeCustomWithDuration:exposureDurationValue ISO:AVCaptureISOCurrent completionHandler:nil];
+            }
         };
     }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
     
@@ -100,14 +90,18 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
     setTorchLevel = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
         return ^ void (float x) {
             float value = MAX(range_min, MIN(scale(x, range_min, range_max, min_x, max_x), range_max));
-//            value = MAX(0.0, MIN(scale(value, range_min, range_max, 0.0, 1.0), 1.0));
             if (value != 0)
-                [captureDevice setTorchModeOnWithLevel:value error:nil];
+                [cd setTorchModeOnWithLevel:value error:nil];
             else
-                [captureDevice setTorchMode:AVCaptureTorchModeOff];
+                [cd setTorchMode:AVCaptureTorchModeOff];
         };
     }(captureDevice, 0.0, 1.0, 0.0, CGRectGetWidth(self.scrollView.bounds));
     
+    configureCameraProperty = ^ (void(^cameraPropertySetter)(float)) {
+        return ^ void (float x) {
+            cameraPropertySetter(x);
+        };
+    }(setExposureDuration);
 }
 
 - (IBAction)setCameraProperty:(UIButton *)sender {
@@ -117,7 +111,8 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
             [button setSelected:FALSE];
             [button setHighlighted:FALSE];
         }
-        [(UIButton *)sender setSelected:TRUE ];
+        
+        [(UIButton *)sender setSelected:TRUE];
         [(UIButton *)sender setHighlighted:TRUE];
         
         NSInteger tag = [sender tag];
@@ -128,7 +123,7 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
                 break;
             }
             case 1: {
-                cameraPropertyConfiguration = setZoomFactor;
+                cameraPropertyConfiguration = setLensPosition;
                 break;
             }
             case 2: {
@@ -140,7 +135,7 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
                 break;
             }
             case 4: {
-                cameraPropertyConfiguration = setLensPosition;
+                cameraPropertyConfiguration = setZoomFactor;
                 break;
             }
             default:
@@ -163,7 +158,6 @@ static CMTime (^secondsToCMTime)(float) = ^ CMTime (float seconds) {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    // To-Do: Get selected button...
     if ((scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating))
     {
         configureCameraProperty(scrollView.contentOffset.x);
