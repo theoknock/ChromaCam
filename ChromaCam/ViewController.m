@@ -35,6 +35,7 @@ static float scale(float unscaledNum, float minAllowed, float maxAllowed, float 
     return self.cameraControlButtons.count;
 }
 
+// Maybe To-Do: Replace by getting the image from the subview (UIButton) of the stack view with the same tag as the indexPath.item
 static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger tag) {
     NSString * systemImageName = nil;
     switch (tag) {
@@ -66,7 +67,6 @@ static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CameraControlCellReuseID" forIndexPath:indexPath];
-//    [cell setTag:indexPath.item]; // set the cell's tag to the item number for the index path so it will act like a camera property configuration button when selected
 
     UIButton * cameraControlButton = (UIButton *)[[cell.contentView subviews] firstObject];
     [cameraControlButton setFrame:cell.contentView.bounds];

@@ -116,7 +116,7 @@
                                             <constraint firstItem="v7M-va-8Vf" firstAttribute="top" secondItem="qO4-MJ-UTY" secondAttribute="top" id="UDr-iW-gpW"/>
                                         </constraints>
                                     </view>
-                                    <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KrK-WE-81r">
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KrK-WE-81r">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="UjC-yF-Mmv">
@@ -204,11 +204,11 @@
                         <outlet property="scrollViewSlider" destination="lNW-f4-Qvd" id="9pL-I2-trM"/>
                         <outlet property="torchLevelButton" destination="VLt-Dq-KeX" id="Pww-gz-5fx"/>
                         <outlet property="zoomFactorButton" destination="ecF-1h-6bJ" id="JVn-Cq-hfL"/>
-                        <outletCollection property="cameraControlButtons" destination="ecF-1h-6bJ" id="58r-EJ-a4E"/>
-                        <outletCollection property="cameraControlButtons" destination="VLt-Dq-KeX" id="4j1-gg-WFP"/>
-                        <outletCollection property="cameraControlButtons" destination="I0i-pZ-A58" id="lOR-S2-y6w"/>
-                        <outletCollection property="cameraControlButtons" destination="l3D-aH-6s7" id="e11-eJ-xt0"/>
-                        <outletCollection property="cameraControlButtons" destination="YWB-b1-8aC" id="9W1-qn-snG"/>
+                        <outletCollection property="cameraControlButtons" destination="VLt-Dq-KeX" id="YIz-va-BnL"/>
+                        <outletCollection property="cameraControlButtons" destination="I0i-pZ-A58" id="2DE-M4-Xul"/>
+                        <outletCollection property="cameraControlButtons" destination="l3D-aH-6s7" id="qI0-Iu-zhY"/>
+                        <outletCollection property="cameraControlButtons" destination="YWB-b1-8aC" id="DmF-tA-MXG"/>
+                        <outletCollection property="cameraControlButtons" destination="ecF-1h-6bJ" id="6hu-Se-6WC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
