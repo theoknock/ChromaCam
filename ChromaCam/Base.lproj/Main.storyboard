@@ -35,34 +35,49 @@
                                                 <state key="normal" image="bolt.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fpZ-Rw-LyR"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I0i-pZ-A58">
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I0i-pZ-A58">
                                                 <rect key="frame" x="83" y="7.5" width="82.5" height="48"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" image="viewfinder.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="skC-b0-fZw"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l3D-aH-6s7">
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l3D-aH-6s7">
                                                 <rect key="frame" x="165.5" y="7.5" width="83" height="48"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="" image="timer" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="luI-IV-cQN"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YWB-b1-8aC">
+                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YWB-b1-8aC">
                                                 <rect key="frame" x="248.5" y="7.5" width="82.5" height="48"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="" image="camera.aperture" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Ho-4w-60b"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ecF-1h-6bJ">
+                                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ecF-1h-6bJ">
                                                 <rect key="frame" x="331" y="7.5" width="83" height="48"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" image="magnifyingglass.circle" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xpt-bu-ACL"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemGray3Color"/>
@@ -73,7 +88,7 @@
                                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v7M-va-8Vf">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lNW-f4-Qvd">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lNW-f4-Qvd" customClass="ScrollViewSlider">
                                                         <rect key="frame" x="207" y="0.0" width="414" height="63"/>
                                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
@@ -136,10 +151,20 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="ISOButton" destination="YWB-b1-8aC" id="sKx-30-Cde"/>
                         <outlet property="captureVideoPreview" destination="scO-X4-Tlv" id="RcB-hK-JZH"/>
+                        <outlet property="exposureDurationButton" destination="l3D-aH-6s7" id="q4a-hL-zKX"/>
+                        <outlet property="lensPositionButton" destination="I0i-pZ-A58" id="eRc-Mn-0xv"/>
                         <outlet property="scrollView" destination="v7M-va-8Vf" id="n6V-kf-i6E"/>
                         <outlet property="scrollViewControl" destination="qO4-MJ-UTY" id="228-X1-bag"/>
-                        <outlet property="scrollViewSlider" destination="lNW-f4-Qvd" id="cLK-4U-4jA"/>
+                        <outlet property="scrollViewSlider" destination="lNW-f4-Qvd" id="9pL-I2-trM"/>
+                        <outlet property="torchLevelButton" destination="VLt-Dq-KeX" id="Pww-gz-5fx"/>
+                        <outlet property="zoomFactorButton" destination="ecF-1h-6bJ" id="JVn-Cq-hfL"/>
+                        <outletCollection property="cameraControlButtons" destination="ecF-1h-6bJ" id="58r-EJ-a4E"/>
+                        <outletCollection property="cameraControlButtons" destination="VLt-Dq-KeX" id="4j1-gg-WFP"/>
+                        <outletCollection property="cameraControlButtons" destination="I0i-pZ-A58" id="lOR-S2-y6w"/>
+                        <outletCollection property="cameraControlButtons" destination="l3D-aH-6s7" id="e11-eJ-xt0"/>
+                        <outletCollection property="cameraControlButtons" destination="YWB-b1-8aC" id="9W1-qn-snG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -13,6 +13,9 @@
     AVCaptureDevice      * captureDevice;
     AVCaptureDeviceInput * captureInput;
     AVCaptureConnection  * captureConnection;
+    
+    void (^configureCameraProperty)(float);
+    void (^setZoomFactor)(float);
 }
 
 @end
@@ -36,15 +39,58 @@
     }
     [captureSession commitConfiguration];
     [captureSession startRunning];
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    [captureDevice lockForConfiguration:nil];
+    
+    setZoomFactor = ^(AVCaptureDevice * cd, float range_min, float range_max, float min_x, float max_x) {
+        return ^ void (float x) {
+                float value = normalize(x, range_min, range_max, min_x, max_x);
+                [cd setVideoZoomFactor:MAX(range_min, MIN(value, range_max))];
+            };
+    }(captureDevice, 1.0, captureDevice.activeFormat.videoMaxZoomFactor, 0.0, CGRectGetWidth(self.scrollView.bounds));
 }
 
 float normalize(float unscaledNum, float minAllowed, float maxAllowed, float min, float max) {
     return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
+}
+
+typedef void (^SetCameraProperty)(float);
+
+
+
+- (IBAction)setCameraProperty:(UIButton *)sender {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (UIButton * button in self.cameraControlButtons)
+        {
+            [button setSelected:FALSE];
+            [button setHighlighted:FALSE];
+        }
+        [(UIButton *)sender setSelected:TRUE ];
+        [(UIButton *)sender setHighlighted:TRUE];
+        
+        NSInteger tag = 2;
+        switch (tag) {
+            case 2: {
+                configureCameraProperty = ^ (SetCameraProperty cameraPropertySetter) {
+                    return ^ void (float x) {
+                        cameraPropertySetter(x);
+                    };
+                }(setZoomFactor);
+                break;
+            }
+            default:
+                break;
+        }
+    });
+    
+    // To-Do: Create a block to configure each camera property; set the constant variables only once
+    //        Create a global block property that takes the camera property configuration block associated
+    //        with the selected button
+    //        Pass the camera property configuration block to the global block property and execute it in scrollViewDidScroll
+}
+
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [captureDevice lockForConfiguration:nil];
 }
 
 static float(^scaleSliderValue)(CGRect, CGFloat, float, float) = ^float(CGRect scrollViewFrame, CGFloat contentOffsetX, float scaleMinimum, float scaleMaximum)
@@ -60,13 +106,10 @@ static float(^scaleSliderValue)(CGRect, CGFloat, float, float) = ^float(CGRect s
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    // To-Do: Get selected button...
     if ((scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating))
     {
-//        NSLog(@"scrollView.bounds.origin.x == %f\nscrollView.bounds.size.width == %f\n", CGRectGetMinX(self.scrollView.bounds), CGRectGetWidth(self.scrollView.bounds));
-//        float value = scaleSliderValue(scrollView.frame, scrollView.contentOffset.x, 1.0, captureDevice.activeFormat.videoMaxZoomFactor);
-        float value = normalize(scrollView.contentOffset.x, 1.0, captureDevice.activeFormat.videoMaxZoomFactor, 0.0, CGRectGetWidth(self.scrollView.bounds));
-        [captureDevice setVideoZoomFactor:MAX(1.0, MIN(value, captureDevice.activeFormat.videoMaxZoomFactor))];
-        NSLog(@"value == %f", value);
+        configureCameraProperty(scrollView.contentOffset.x);
     }
 }
 
