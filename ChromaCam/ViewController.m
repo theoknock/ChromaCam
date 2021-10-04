@@ -30,6 +30,67 @@ static float scale(float unscaledNum, float minAllowed, float maxAllowed, float 
     return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
 }
 
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.cameraControlButtons.count;
+}
+
+static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger tag) {
+    NSString * systemImageName = nil;
+    switch (tag) {
+        case 0:
+            systemImageName = @"bolt.circle";
+            break;
+        case 1:
+            systemImageName = @"viewfinder.circle";
+            break;
+        case 2:
+            systemImageName = @"timer";
+            break;
+        case 3:
+            systemImageName = @"camera.aperture";
+            break;
+        case 4:
+            systemImageName = @"magnifyingglass.circle";
+            break;
+        
+        default:
+            break;
+    }
+    
+    UIImage * backgroundImage = [UIImage systemImageNamed:systemImageName withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:42.0]];;
+    
+    return backgroundImage;
+};
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CameraControlCellReuseID" forIndexPath:indexPath];
+//    [cell setTag:indexPath.item]; // set the cell's tag to the item number for the index path so it will act like a camera property configuration button when selected
+
+    UIButton * cameraControlButton = (UIButton *)[[cell.contentView subviews] firstObject];
+    [cameraControlButton setFrame:cell.contentView.bounds];
+    [cameraControlButton setTag:indexPath.item];
+    [cameraControlButton setImage:cameraControlButtonImage(indexPath.item) forState:UIControlStateNormal];
+    [cameraControlButton addTarget:self action:@selector(setCameraProperty:) forControlEvents:UIControlEventAllEvents];
+    
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell * cell = [collectionView cellForItemAtIndexPath:indexPath];
+    UIButton * cameraControlButton = (UIButton *)[[cell.contentView subviews] firstObject];
+    [cameraControlButton setTag:indexPath.item];
+    [self setCameraProperty:cameraControlButton];
+}
+
+// UICollectionView To-Do:
+//          1.    When a cell is no longer centered, deselect and unhighlight the button
+//          2.    Center a cell when selected or scrolling towards the center while not dragging or tracking; select and highlight its button
+//          3.    Set horizontal content inset so all cells can be centered when selected
+//          4.    Evenly space and center cells
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -98,8 +159,8 @@ static float scale(float unscaledNum, float minAllowed, float maxAllowed, float 
         };
     }(setExposureDuration);
 }
-
-- (IBAction)setCameraProperty:(UIButton *)sender {
+- (IBAction)setCameraProperty:(id)sender {
+    printf("sender.tag == %lu", ((UIButton *)sender).tag);
     dispatch_async(dispatch_get_main_queue(), ^{
         for (UIButton * button in self.cameraControlButtons)
         {

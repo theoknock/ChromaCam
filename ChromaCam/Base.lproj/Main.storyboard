@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -36,7 +37,7 @@
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fpZ-Rw-LyR"/>
+                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LPd-0B-s91"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I0i-pZ-A58">
@@ -46,7 +47,7 @@
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="skC-b0-fZw"/>
+                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="W7n-2q-pAO"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="2" contentMode="scaleToFill" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l3D-aH-6s7">
@@ -56,7 +57,7 @@
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="luI-IV-cQN"/>
+                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6yA-aK-fu2"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YWB-b1-8aC">
@@ -66,7 +67,7 @@
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Ho-4w-60b"/>
+                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="n5X-cO-rFq"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ecF-1h-6bJ">
@@ -76,7 +77,7 @@
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xpt-bu-ACL"/>
+                                                    <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Pwf-iG-cNp"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -90,7 +91,7 @@
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lNW-f4-Qvd" customClass="ScrollViewSlider">
                                                         <rect key="frame" x="207" y="0.0" width="414" height="63"/>
-                                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
                                                 </subviews>
                                                 <color key="backgroundColor" systemColor="systemGray2Color"/>
@@ -115,15 +116,57 @@
                                             <constraint firstItem="v7M-va-8Vf" firstAttribute="top" secondItem="qO4-MJ-UTY" secondAttribute="top" id="UDr-iW-gpW"/>
                                         </constraints>
                                     </view>
+                                    <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KrK-WE-81r">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="UjC-yF-Mmv">
+                                            <size key="itemSize" width="128" height="128"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CameraControlCellReuseID" id="tBp-jT-9IY">
+                                                <rect key="frame" x="0.0" y="-32.5" width="128" height="128"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="srQ-Ne-Gm8">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0bE-IJ-vOn">
+                                                            <rect key="frame" x="22" y="39" width="83" height="48"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="normal" image="questionmark.circle" catalog="system">
+                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="setCameraProperty:" destination="BYZ-38-t0r" eventType="touchUpInside" id="irF-Kb-2ie"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <color key="backgroundColor" systemColor="systemGray2Color"/>
+                                                </collectionViewCellContentView>
+                                            </collectionViewCell>
+                                        </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="BYZ-38-t0r" id="iqz-Ig-hCT"/>
+                                            <outlet property="delegate" destination="BYZ-38-t0r" id="R8b-1B-mtf"/>
+                                        </connections>
+                                    </collectionView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemGray4Color"/>
                                 <constraints>
                                     <constraint firstItem="I45-hf-bEA" firstAttribute="trailing" secondItem="4bX-Hu-qB5" secondAttribute="trailing" id="08z-0g-iyE"/>
+                                    <constraint firstItem="KrK-WE-81r" firstAttribute="leading" secondItem="I45-hf-bEA" secondAttribute="leading" id="Bhe-AZ-usO"/>
+                                    <constraint firstItem="KrK-WE-81r" firstAttribute="height" secondItem="I45-hf-bEA" secondAttribute="height" id="HAB-n4-oA6"/>
                                     <constraint firstItem="qO4-MJ-UTY" firstAttribute="trailing" secondItem="4bX-Hu-qB5" secondAttribute="trailing" id="JbZ-YY-ppi"/>
                                     <constraint firstItem="qO4-MJ-UTY" firstAttribute="height" secondItem="4bX-Hu-qB5" secondAttribute="height" multiplier="0.5" id="LZo-Dl-JXZ"/>
+                                    <constraint firstItem="KrK-WE-81r" firstAttribute="bottom" secondItem="I45-hf-bEA" secondAttribute="bottom" id="TNb-Ye-K4F"/>
                                     <constraint firstItem="Fvh-Eq-1hg" firstAttribute="width" secondItem="I45-hf-bEA" secondAttribute="width" multiplier="2" id="XGq-8I-QYZ"/>
                                     <constraint firstItem="Wne-Gy-rFN" firstAttribute="width" secondItem="I45-hf-bEA" secondAttribute="width" id="XSN-Bw-Yqr"/>
                                     <constraint firstItem="qO4-MJ-UTY" firstAttribute="leading" secondItem="4bX-Hu-qB5" secondAttribute="leading" id="YBf-Mw-Ran"/>
+                                    <constraint firstItem="KrK-WE-81r" firstAttribute="trailing" secondItem="I45-hf-bEA" secondAttribute="trailing" id="bCe-V9-FBi"/>
                                     <constraint firstItem="I45-hf-bEA" firstAttribute="leading" secondItem="4bX-Hu-qB5" secondAttribute="leading" id="edY-Ft-YnD"/>
                                     <constraint firstItem="Fvh-Eq-1hg" firstAttribute="height" secondItem="I45-hf-bEA" secondAttribute="height" id="g8k-iZ-jID"/>
                                     <constraint firstItem="I45-hf-bEA" firstAttribute="top" secondItem="4bX-Hu-qB5" secondAttribute="top" id="gCf-AF-WWq"/>
@@ -152,6 +195,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="ISOButton" destination="YWB-b1-8aC" id="sKx-30-Cde"/>
+                        <outlet property="cameraControlButtonsStackView" destination="I45-hf-bEA" id="DbM-QS-hW7"/>
                         <outlet property="captureVideoPreview" destination="scO-X4-Tlv" id="RcB-hK-JZH"/>
                         <outlet property="exposureDurationButton" destination="l3D-aH-6s7" id="q4a-hL-zKX"/>
                         <outlet property="lensPositionButton" destination="I0i-pZ-A58" id="eRc-Mn-0xv"/>
@@ -176,8 +220,12 @@
         <image name="bolt.circle" catalog="system" width="128" height="121"/>
         <image name="camera.aperture" catalog="system" width="128" height="121"/>
         <image name="magnifyingglass.circle" catalog="system" width="128" height="121"/>
+        <image name="questionmark.circle" catalog="system" width="128" height="121"/>
         <image name="timer" catalog="system" width="128" height="121"/>
         <image name="viewfinder.circle" catalog="system" width="128" height="121"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemGray2Color">
             <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

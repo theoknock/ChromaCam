@@ -85,7 +85,6 @@
 			isa = PBXGroup;
 			children = (
 				B9E2CF8126FFB2D7008D617E /* AppDelegate.h */,
-				B9E2CF8226FFB2D7008D617E /* AppDelegate.m */,
 				B9E2CF8426FFB2D7008D617E /* SceneDelegate.h */,
 				B9E2CF8526FFB2D7008D617E /* SceneDelegate.m */,
 				B9E2CF8726FFB2D7008D617E /* ViewController.h */,
@@ -95,6 +94,7 @@
 				B9CE504A2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m */,
 				B9CE504C2707D5E600FCD024 /* CaptureSessionConfigurationQueue.h */,
 				B9CE504D2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c */,
+				B9E2CF8226FFB2D7008D617E /* AppDelegate.m */,
 				B9E2CF8A26FFB2D7008D617E /* Main.storyboard */,
 				B9E2CF8D26FFB2D9008D617E /* Assets.xcassets */,
 				B9E2CF9226FFB2D9008D617E /* Info.plist */,

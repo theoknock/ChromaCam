@@ -69,16 +69,6 @@
     [(CATextLayer *)textLayer setOpaque:FALSE];
     [(CATextLayer *)textLayer setAlignmentMode:kCAAlignmentCenter];
     [(CATextLayer *)textLayer setWrapped:FALSE];
-//    [(CATextLayer *)textLayer setBorderWidth:1.0];
-//    [(CATextLayer *)textLayer setBorderColor:[UIColor redColor].CGColor];
-//    [self setBorderWidth:1.0];
-//    [self setBorderColor:[UIColor redColor].CGColor];
-    
-}
-
-- (CGFloat)inset
-{
-    return 0.0;//fabs(CGRectGetMidX(self.frame) - CGRectGetMinX(self.frame));
 }
 
 - (CGSize)suggestFrameSizeWithConstraints:(CGSize)size forAttributedString:(NSAttributedString *)attributedString
