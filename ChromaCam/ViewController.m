@@ -65,12 +65,16 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
     [captureSession startRunning];
     
     [self setCameraProperty:self.torchLevelButton];
+    
+    [self.propertyScrollView setDecelerationRate:UIScrollViewDecelerationRateFast];
+    
+    //    [self.propertyContentView.layer setBorderColor:[UIColor redColor].CGColor];
+    //    [self.propertyContentView.layer setBorderWidth:2.0];
+    //    printf("self.propertyContentView.layer.bounds.size.width == % f", self.propertyContentView.layer.bounds.size.width);
 }
 
 - (IBAction)setCameraProperty:(id)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [(UIButton *)sender setSelected:TRUE];
-        [(UIButton *)sender setHighlighted:TRUE];
         
         CGPoint scrollViewContentOffset = CGPointMake([(UIButton *)sender bounds].size.width * [sender tag], self.propertyScrollView.contentOffset.y);
         [self.propertyScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
@@ -82,18 +86,25 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
             [button setSelected:FALSE];
             [button setHighlighted:FALSE];
             
-            // To-Do: Move this so that it is accessible from the scrollViewDidScroll
-            CGFloat buttonCenterX = [button bounds].size.width * [sender tag];
-            CGFloat differenceCenterXMax = [button bounds].size.width * 2;
-            CGFloat differenceCenterX = fabs(buttonCenterX - scrollViewCenterX);
+            //            float button_alpha = (float)((100.0 - (labs(((UIButton *)sender).tag - button.tag) * 25.0)) / 100.0);
+            //            printf("button_alpha == %f", button_alpha);
+            //            [button setAlpha:button_alpha];
+            //
+            //            CGFloat buttonCenterXOffset = fabs(([button bounds].size.width * (self.cameraControlButtons.count / 2)) - ([button bounds].size.width * button.tag)); // + ([button bounds].size.width / 2.0);
+            //            printf("\n\n-------------\ntag == %lu\t\tbuttonCenterXOffset == %f\n------%f-------\n", button.tag, buttonCenterXOffset, self.propertyScrollView.contentOffset.x /*[button bounds].size.width * 4*/);
+            //            CGFloat differenceCenterX = fabs(buttonCenterX - scrollViewCenterX);
             // 0 == 100% size; 2 * buttonCenterX == 25% reduction in size
             // scale(float old_value, float old_min, float old_max, float new_min, float new_max)
-            CGFloat resize = fabs(scale(differenceCenterX, 0.0, differenceCenterXMax, 42.0, 10.5));
-            NSLog(@"resize % == %f", resize);
-            [button invalidateIntrinsicContentSize];
-            UIImage * resizedImage = [button.currentImage imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:resize]];
-            [button setImage:resizedImage forState:UIControlStateNormal];
+            //            CGFloat resize = fabs(scale(differenceCenterX, 0.0, differenceCenterXMax, 42.0, 10.5));
+            //            NSLog(@"resize % == %f", resize);
+            //            [button invalidateIntrinsicContentSize];
+            //            UIImage * resizedImage = [button.currentImage imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:resize]];
+            //            [button setImage:resizedImage forState:UIControlStateNormal];
         }
+        //        printf("\nself.propertyScrollView.contentOffset.x == %f\n", self.propertyScrollView.contentOffset.x);
+        
+        [(UIButton *)sender setSelected:TRUE];
+        [(UIButton *)sender setHighlighted:TRUE];
         
         
         NSInteger tag = [sender tag];
@@ -184,55 +195,57 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
 }
 
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)valueScrollView
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    [captureDevice lockForConfiguration:nil];
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)valueScrollView
-{
-//    NSLog(@"scrollView tag == %lu", valueScrollView.tag);
-    
-    
-    // Basically, you're calculating the center point of a button based on its distance from the center of its
-    // parent content view based on the distance from the center of the scroll view (same as content view?) and the scroll view offset.
-    // For example: if a button is 200 points from the center of its parent content view...
-    //              ...and the scroll view is offset 400 points from its center...
-    //              ...then you +/- 400 points to the parent content view center...
-    //              ...then you +/- (new parent content view center +/- button distance of 200 points)
-    
-//    NSLog(@"self.propertyScrollView.bounds.size.width == %f", CGRectGetWidth(valueScrollView.bounds));
-//    NSLog(@"self.propertyContentView.bounds.size.width == %f", CGRectGetWidth(self.propertyContentView.bounds));
-//    NSLog(@"button (tag: 1) center == %f", CGRectGetWidth(self.propertyContentView.bounds));
-    
-    
-    switch (valueScrollView.tag) {
+    switch (scrollView.tag) {
         case 0: {
+            [UIView animateWithDuration:0.25 animations:^{
+                [self.valueScrollView setAlpha:0.0];
+            }];
             
-            
-            for (UIButton * button in self.cameraControlButtons)
-            {
-                CGFloat offsetDistanceFromScrollViewCenter = valueScrollView.contentOffset.x;
-                CGFloat buttonCenterXDefault = [button bounds].size.width * button.tag;
-                CGFloat offsetDistanceFromContentViewCenter = CGRectGetMidX(self.propertyContentView.bounds) - buttonCenterXDefault;
-                CGFloat buttonCenterXCurrent = CGRectGetMidX(valueScrollView.bounds) + (offsetDistanceFromScrollViewCenter + offsetDistanceFromContentViewCenter);
-                CGFloat x = CGRectGetWidth(valueScrollView.bounds) - fabs(offsetDistanceFromScrollViewCenter - buttonCenterXCurrent); //CGRectGetWidth(valueScrollView.bounds) - buttonCenterXCurrent;
-                printf("\noffsetDistanceFromScrollViewCenter == %f\n%lu\tbuttonCenterXCurrent == %f\nx == %f\n", offsetDistanceFromScrollViewCenter, button.tag, buttonCenterXCurrent, x);
-                // 0 == 100% size; 2 * buttonCenterX == 25% reduction in size
-                // scale(float old_value, float old_min, float old_max, float new_min, float new_max)
-                CGFloat normalized_x = fabs(normalize(x, 0.0, CGRectGetWidth(valueScrollView.bounds))); //, 10.5, 40.0));
-                printf("\nnormalized_x == %f\n", normalized_x);
-                CGFloat repointSize = 42.0 - (42.0 * normalized_x);
-                UIImage * resizedImage = [button.currentImage imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:repointSize]];
-                [button setImage:resizedImage forState:UIControlStateNormal];
-            }
             break;
         }
-         
+            
         case 1: {
-            if ((valueScrollView.isDragging || valueScrollView.isTracking || valueScrollView.isDecelerating))
+            [captureDevice lockForConfiguration:nil];
+            break;
+        }
+            
+        default:
+            break;
+    }
+    
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    switch (scrollView.tag) {
+            //        case 0: {
+            //
+            //
+            //            for (UIButton * button in self.cameraControlButtons)
+            //            {
+            //                CGFloat offsetDistanceFromScrollViewCenter = scrollView.contentOffset.x;
+            //                CGFloat buttonCenterXDefault = [button bounds].size.width * button.tag;
+            //                CGFloat offsetDistanceFromContentViewCenter = CGRectGetMidX(self.propertyContentView.bounds) - buttonCenterXDefault;
+            //                CGFloat buttonCenterXCurrent = CGRectGetMidX(scrollView.bounds) + (offsetDistanceFromScrollViewCenter + offsetDistanceFromContentViewCenter);
+            //                CGFloat x = CGRectGetWidth(scrollView.bounds) - fabs(offsetDistanceFromScrollViewCenter - buttonCenterXCurrent);
+            //                CGFloat normalized_x = fabs(normalize(x, 0.0, CGRectGetMaxX(scrollView.bounds)));
+            //                CGFloat repointSize = (1.0 - fabs(0.801932 - normalized_x)) * 42.0;
+            ////                printf("\noffsetDistanceFromScrollViewCenter == %f\n%lu\tbuttonCenterXCurrent == %f\nx == %f\n", offsetDistanceFromScrollViewCenter, button.tag, buttonCenterXCurrent, x);
+            ////                printf("\nnormalized_x == %f\n", normalized_x);
+            ////                printf("\nrepointSize == %f\n", repointSize);
+            //                UIImage * resizedImage = [button.currentImage imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:repointSize]];
+            //                [button setImage:resizedImage forState:UIControlStateNormal];
+            //
+            //            }
+            //            break;
+            //        }
+            
+        case 1: {
+            if ((scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating))
             {
-                configureCameraProperty(valueScrollView.contentOffset.x);
+                configureCameraProperty(scrollView.contentOffset.x);
             }
             break;
         }
@@ -241,9 +254,64 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
     }
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)valueScrollView
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-    [captureDevice unlockForConfiguration];
+    
+    switch (scrollView.tag) {
+        case 0: {
+            [UIView animateWithDuration:0.5 animations:^{
+                [self.valueScrollView setAlpha:1.0];
+            }];
+            break;
+        }
+            
+        case 1: {
+            //
+            break;
+        }
+            
+        default:
+            break;
+    }
 }
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    switch (scrollView.tag) {
+        case 0: {
+            CGFloat nearest_button_tag = (scrollView.contentOffset.x / 82.0);
+            printf("nearest_button_tag %f\n", nearest_button_tag);
+            
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+            [formatter setNumberStyle:NSNumberFormatterNoStyle];
+            [formatter setMaximumFractionDigits:0];
+            [formatter setRoundingMode: NSNumberFormatterRoundHalfEven];
+            NSString * rounded_nearest_button_tag_str = [formatter stringFromNumber:[NSNumber numberWithFloat:nearest_button_tag]];
+            NSLog(@"rounded_nearest_button_tag %@\n", rounded_nearest_button_tag_str);
+            
+            NSInteger rounded_nearest_button_tag = [rounded_nearest_button_tag_str integerValue];
+            CGPoint scrollViewContentOffset = CGPointMake(82.0 * rounded_nearest_button_tag, self.propertyScrollView.contentOffset.y);
+            [self.propertyScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+            
+            for (UIButton * button in self.cameraControlButtons) {
+                if (button.tag == rounded_nearest_button_tag) {
+                    [self setCameraProperty:button];
+                    break;
+                }
+            }
+            break;
+        }
+            
+        case 1: {
+            [captureDevice unlockForConfiguration];
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
+
 
 @end
