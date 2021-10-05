@@ -14,6 +14,8 @@
 
 @property (weak, nonatomic) IBOutlet UIScrollView *propertyScrollView;
 @property (weak, nonatomic) IBOutlet UIView * captureVideoPreview;
+@property (weak, nonatomic) IBOutlet UIStackView *propertyButtonsStackView;
+@property (weak, nonatomic) IBOutlet UIView *propertyContentView;
 @property (weak, nonatomic) IBOutlet UIButton *torchLevelButton;
 @property (weak, nonatomic) IBOutlet UIButton *lensPositionButton;
 @property (weak, nonatomic) IBOutlet UIButton *exposureDurationButton;

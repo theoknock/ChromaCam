@@ -45,7 +45,6 @@
 }
 
 - (void)setText:(NSString *)valueString forLayer:(CATextLayer *)textLayer frameWithOffset:(CGFloat)originX {
-    NSLog(@"%f", originX);
     [textLayer setContentsScale:[[UIScreen mainScreen] nativeScale]];
     [textLayer setRasterizationScale:[[UIScreen mainScreen] nativeScale]];
     NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];

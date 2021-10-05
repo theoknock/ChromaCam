@@ -4,185 +4,9 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
-            <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" interfaceStyle="dark" id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleAspectFit" ambiguous="YES" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleAspectFit" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="scO-X4-Tlv">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="scO-X4-Tlv" secondAttribute="height" multiplier="9:16" id="UBR-bI-zIz"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iQe-E9-K2I">
-                                <rect key="frame" x="0.0" y="736" width="414" height="126"/>
-                                <subviews>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X0u-P1-tVN">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M3z-3F-Fj4" userLabel="Content View">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
-                                                <color key="backgroundColor" systemColor="systemGray4Color"/>
-                                            </view>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemGrayColor"/>
-                                        <constraints>
-                                            <constraint firstItem="tZ5-tY-kE7" firstAttribute="width" secondItem="M3z-3F-Fj4" secondAttribute="width" id="2ei-zC-33l"/>
-                                            <constraint firstItem="M3z-3F-Fj4" firstAttribute="leading" secondItem="X0u-P1-tVN" secondAttribute="leading" id="ScE-hf-QMT"/>
-                                            <constraint firstItem="Qfz-07-pMZ" firstAttribute="height" secondItem="M3z-3F-Fj4" secondAttribute="height" id="Vzw-ag-Rh7"/>
-                                            <constraint firstItem="M3z-3F-Fj4" firstAttribute="bottom" secondItem="X0u-P1-tVN" secondAttribute="bottom" id="gvF-Dg-FxW"/>
-                                            <constraint firstItem="tZ5-tY-kE7" firstAttribute="height" secondItem="M3z-3F-Fj4" secondAttribute="height" id="mTN-jG-Dac"/>
-                                            <constraint firstItem="M3z-3F-Fj4" firstAttribute="top" secondItem="X0u-P1-tVN" secondAttribute="top" id="nfH-8c-KzN"/>
-                                            <constraint firstItem="M3z-3F-Fj4" firstAttribute="trailing" secondItem="X0u-P1-tVN" secondAttribute="trailing" id="pWR-HH-qGs"/>
-                                            <constraint firstItem="Qfz-07-pMZ" firstAttribute="width" secondItem="M3z-3F-Fj4" secondAttribute="width" multiplier="2" id="sxr-Ms-mfD"/>
-                                        </constraints>
-                                        <viewLayoutGuide key="contentLayoutGuide" id="Qfz-07-pMZ"/>
-                                        <viewLayoutGuide key="frameLayoutGuide" id="tZ5-tY-kE7"/>
-                                    </scrollView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBlueColor"/>
-                                <constraints>
-                                    <constraint firstItem="X0u-P1-tVN" firstAttribute="width" secondItem="iQe-E9-K2I" secondAttribute="width" id="6hG-fc-66e"/>
-                                    <constraint firstItem="X0u-P1-tVN" firstAttribute="leading" secondItem="iQe-E9-K2I" secondAttribute="leading" id="8dI-ep-hd6"/>
-                                    <constraint firstItem="X0u-P1-tVN" firstAttribute="bottom" secondItem="iQe-E9-K2I" secondAttribute="centerY" id="QTH-jf-y3v"/>
-                                    <constraint firstItem="X0u-P1-tVN" firstAttribute="top" secondItem="iQe-E9-K2I" secondAttribute="top" id="dRD-uM-ogh"/>
-                                </constraints>
-                            </view>
-                            <view hidden="YES" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B8B-A7-G8s" userLabel="Property Control">
-                                <rect key="frame" x="0.0" y="368" width="414" height="0.0"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N9C-LW-pzb" userLabel="Property Buttons Scroll View">
-                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="48"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TfK-Pg-n5M" userLabel="Property Buttons View">
-                                                <rect key="frame" x="76" y="0.0" width="152" height="48"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="I45-hf-bEA" userLabel="Property Buttons Stack View">
-                                                        <rect key="frame" x="0.0" y="0.0" width="245" height="48"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VLt-Dq-KeX">
-                                                                <rect key="frame" x="0.0" y="0.0" width="49" height="48"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal" image="bolt.circle" catalog="system">
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
-                                                                </state>
-                                                            </button>
-                                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I0i-pZ-A58">
-                                                                <rect key="frame" x="49" y="0.0" width="49" height="48"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal" image="viewfinder.circle" catalog="system">
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
-                                                                </state>
-                                                            </button>
-                                                            <button opaque="NO" tag="2" contentMode="scaleToFill" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l3D-aH-6s7">
-                                                                <rect key="frame" x="98" y="0.0" width="49" height="48"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal" title="" image="timer" catalog="system">
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
-                                                                </state>
-                                                            </button>
-                                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YWB-b1-8aC">
-                                                                <rect key="frame" x="147" y="0.0" width="49" height="48"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal" title="" image="camera.aperture" catalog="system">
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
-                                                                </state>
-                                                            </button>
-                                                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ecF-1h-6bJ">
-                                                                <rect key="frame" x="196" y="0.0" width="49" height="48"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal" image="magnifyingglass.circle" catalog="system">
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42"/>
-                                                                </state>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" systemColor="systemGray3Color"/>
-                                                    </stackView>
-                                                </subviews>
-                                                <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                                <constraints>
-                                                    <constraint firstItem="I45-hf-bEA" firstAttribute="top" secondItem="TfK-Pg-n5M" secondAttribute="top" id="Bhg-4H-Xe4"/>
-                                                    <constraint firstItem="I45-hf-bEA" firstAttribute="leading" secondItem="TfK-Pg-n5M" secondAttribute="leading" id="asA-nf-miX"/>
-                                                    <constraint firstItem="I45-hf-bEA" firstAttribute="bottom" secondItem="TfK-Pg-n5M" secondAttribute="bottom" id="bsl-te-EXw"/>
-                                                    <constraint firstItem="I45-hf-bEA" firstAttribute="trailing" secondItem="TfK-Pg-n5M" secondAttribute="trailing" id="wwr-LO-ciI"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemGray2Color"/>
-                                        <viewLayoutGuide key="contentLayoutGuide" id="xMc-6x-JV4"/>
-                                        <viewLayoutGuide key="frameLayoutGuide" id="CWr-yG-Ep5"/>
-                                    </scrollView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                            <view hidden="YES" opaque="NO" alpha="0.0" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qO4-MJ-UTY" userLabel="Value Control">
-                                <rect key="frame" x="0.0" y="799" width="414" height="63"/>
-                                <subviews>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v7M-va-8Vf" userLabel="Value Scroll View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lNW-f4-Qvd" userLabel="Value View" customClass="ScrollViewContentView">
-                                                <rect key="frame" x="207" y="0.0" width="414" height="63"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </view>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemGray2Color"/>
-                                        <constraints>
-                                            <constraint firstItem="Fvh-Eq-1hg" firstAttribute="height" secondItem="lNW-f4-Qvd" secondAttribute="height" id="6rD-2Z-7Aj"/>
-                                            <constraint firstItem="Wne-Gy-rFN" firstAttribute="height" secondItem="lNW-f4-Qvd" secondAttribute="height" id="Fwz-D6-zXl"/>
-                                            <constraint firstItem="lNW-f4-Qvd" firstAttribute="leading" secondItem="v7M-va-8Vf" secondAttribute="centerX" id="JBd-Fe-0jr"/>
-                                            <constraint firstItem="lNW-f4-Qvd" firstAttribute="width" secondItem="v7M-va-8Vf" secondAttribute="width" id="Yz1-Ic-g1W"/>
-                                            <constraint firstItem="lNW-f4-Qvd" firstAttribute="height" secondItem="v7M-va-8Vf" secondAttribute="height" id="eq4-fh-l2u"/>
-                                            <constraint firstItem="Fvh-Eq-1hg" firstAttribute="width" secondItem="lNW-f4-Qvd" secondAttribute="width" multiplier="2" id="gpX-gu-WIz"/>
-                                            <constraint firstItem="lNW-f4-Qvd" firstAttribute="centerY" secondItem="v7M-va-8Vf" secondAttribute="centerY" id="uWw-Ju-9a7"/>
-                                            <constraint firstItem="Wne-Gy-rFN" firstAttribute="width" secondItem="lNW-f4-Qvd" secondAttribute="width" id="vVT-zl-ZyP"/>
-                                        </constraints>
-                                        <viewLayoutGuide key="contentLayoutGuide" id="Fvh-Eq-1hg"/>
-                                        <viewLayoutGuide key="frameLayoutGuide" id="Wne-Gy-rFN"/>
-                                    </scrollView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemGray2Color"/>
-                                <constraints>
-                                    <constraint firstItem="v7M-va-8Vf" firstAttribute="bottom" secondItem="qO4-MJ-UTY" secondAttribute="bottom" id="Czp-sk-We9"/>
-                                    <constraint firstItem="v7M-va-8Vf" firstAttribute="leading" secondItem="qO4-MJ-UTY" secondAttribute="leading" id="RFO-fw-rEV"/>
-                                    <constraint firstItem="v7M-va-8Vf" firstAttribute="trailing" secondItem="qO4-MJ-UTY" secondAttribute="trailing" id="Rgs-Lw-pIv"/>
-                                    <constraint firstItem="v7M-va-8Vf" firstAttribute="top" secondItem="qO4-MJ-UTY" secondAttribute="top" id="UDr-iW-gpW"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemGray6Color"/>
-                        <accessibility key="accessibilityConfiguration">
-                            <accessibilityTraits key="traits" notEnabled="YES" updatesFrequently="YES" startsMediaSession="YES"/>
-                        </accessibility>
-                        <constraints>
-                            <constraint firstItem="iQe-E9-K2I" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="2tU-lc-5Zz"/>
-                            <constraint firstItem="scO-X4-Tlv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="6l9-lo-IAh"/>
-                            <constraint firstItem="iQe-E9-K2I" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="BQU-WV-Lp7"/>
-                            <constraint firstItem="iQe-E9-K2I" firstAttribute="top" secondItem="scO-X4-Tlv" secondAttribute="bottom" id="JiD-Ez-8ZQ"/>
-                            <constraint firstItem="scO-X4-Tlv" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="LB2-mR-plw"/>
-                            <constraint firstItem="scO-X4-Tlv" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="PeN-kK-Zao"/>
-                            <constraint firstItem="iQe-E9-K2I" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="dpi-jg-Dyj"/>
-                        </constraints>
-                    </view>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="137.68115942028987" y="137.94642857142856"/>
-        </scene>
         <!--View Controller-->
         <scene sceneID="uY4-lx-ENN">
             <objects>
@@ -204,7 +28,7 @@
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hyR-Lm-v0c" userLabel="Property Scroll View">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zHT-nV-MLI" userLabel="Content View">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zHT-nV-MLI" userLabel="Property Content View">
                                                 <rect key="frame" x="165.5" y="0.0" width="414" height="63"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="lOy-nD-2GF">
@@ -286,13 +110,16 @@
                                         </constraints>
                                         <viewLayoutGuide key="contentLayoutGuide" id="1XU-OF-2W6"/>
                                         <viewLayoutGuide key="frameLayoutGuide" id="6xr-nu-Xjx"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="Vkk-zE-HFM" id="MgK-QI-pJz"/>
+                                        </connections>
                                     </scrollView>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l4j-o2-yms" userLabel="Value Scroll View">
+                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l4j-o2-yms" userLabel="Value Scroll View">
                                         <rect key="frame" x="0.0" y="63" width="414" height="63"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AUn-31-wbz" userLabel="Value Content View" customClass="ScrollViewContentView">
                                                 <rect key="frame" x="207" y="0.0" width="414" height="63"/>
-                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </view>
                                         </subviews>
                                         <constraints>
@@ -344,6 +171,8 @@
                         <outlet property="captureVideoPreview" destination="0kB-bU-dhr" id="5oW-qV-ysx"/>
                         <outlet property="exposureDurationButton" destination="2PL-7G-Xw5" id="det-Ld-L1D"/>
                         <outlet property="lensPositionButton" destination="aL6-zp-eUp" id="no1-R9-buw"/>
+                        <outlet property="propertyButtonsStackView" destination="lOy-nD-2GF" id="fqe-Ab-sqg"/>
+                        <outlet property="propertyContentView" destination="zHT-nV-MLI" id="9mS-hL-131"/>
                         <outlet property="propertyScrollView" destination="hyR-Lm-v0c" id="ivK-e6-Cle"/>
                         <outlet property="torchLevelButton" destination="Px9-an-ysB" id="Zf6-eJ-E0r"/>
                         <outlet property="valueContentView" destination="AUn-31-wbz" id="t2c-he-Bk8"/>
@@ -362,29 +191,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bolt.circle" catalog="system" width="128" height="121"/>
         <image name="camera.aperture" catalog="system" width="128" height="121"/>
         <image name="lightbulb.circle" catalog="system" width="128" height="121"/>
         <image name="magnifyingglass.circle" catalog="system" width="128" height="121"/>
         <image name="timer" catalog="system" width="128" height="121"/>
         <image name="viewfinder.circle" catalog="system" width="128" height="121"/>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGray3Color">
-            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGray4Color">
-            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
     </resources>
 </document>
