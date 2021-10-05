@@ -191,7 +191,7 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
 
 - (void)scrollViewDidScroll:(UIScrollView *)valueScrollView
 {
-    NSLog(@"scrollView tag == %lu", valueScrollView.tag);
+//    NSLog(@"scrollView tag == %lu", valueScrollView.tag);
     
     
     // Basically, you're calculating the center point of a button based on its distance from the center of its
@@ -201,27 +201,29 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
     //              ...then you +/- 400 points to the parent content view center...
     //              ...then you +/- (new parent content view center +/- button distance of 200 points)
     
+//    NSLog(@"self.propertyScrollView.bounds.size.width == %f", CGRectGetWidth(valueScrollView.bounds));
+//    NSLog(@"self.propertyContentView.bounds.size.width == %f", CGRectGetWidth(self.propertyContentView.bounds));
+//    NSLog(@"button (tag: 1) center == %f", CGRectGetWidth(self.propertyContentView.bounds));
+    
+    
     switch (valueScrollView.tag) {
         case 0: {
-            CGFloat scrollViewCenterX = CGRectGetWidth(valueScrollView.bounds);
-            CGFloat differenceCenterXMax = CGRectGetMaxX(valueScrollView.bounds) - scrollViewCenterX;
-            CGFloat buttonWidth = [[self.cameraControlButtons firstObject] bounds].size.width;
-            CGFloat buttonCenterX = buttonWidth * 2;
-            CGFloat buttonCenterXMax = buttonWidth * 4;
-            CGFloat buttonCenterXMaxDiff = buttonCenterXMax - buttonCenterX;
+            
             
             for (UIButton * button in self.cameraControlButtons)
             {
-                // TO-DO: Get the center point of the button relative to the center of the scrollview
-                CGRect buttonCenterDistanceFromScrollViewCenter = [valueScrollView convertRect:button.bounds fromView:self.propertyContentView];
-                NSLog(@"CGRectGetMidX(buttonCenterDistanceFromScrollViewCenter) == %f", CGRectGetMidX(buttonCenterDistanceFromScrollViewCenter));
-                //                CGFloat buttonCenterXDiff = [button bounds].size.width * [button tag];
-                CGFloat differenceCenterX = fabs(valueScrollView.contentOffset.x - scrollViewCenterX);
+                CGFloat offsetDistanceFromScrollViewCenter = valueScrollView.contentOffset.x;
+                CGFloat buttonCenterXDefault = [button bounds].size.width * button.tag;
+                CGFloat offsetDistanceFromContentViewCenter = CGRectGetMidX(self.propertyContentView.bounds) - buttonCenterXDefault;
+                CGFloat buttonCenterXCurrent = CGRectGetMidX(valueScrollView.bounds) + (offsetDistanceFromScrollViewCenter + offsetDistanceFromContentViewCenter);
+                CGFloat x = CGRectGetWidth(valueScrollView.bounds) - fabs(offsetDistanceFromScrollViewCenter - buttonCenterXCurrent); //CGRectGetWidth(valueScrollView.bounds) - buttonCenterXCurrent;
+                printf("\noffsetDistanceFromScrollViewCenter == %f\n%lu\tbuttonCenterXCurrent == %f\nx == %f\n", offsetDistanceFromScrollViewCenter, button.tag, buttonCenterXCurrent, x);
                 // 0 == 100% size; 2 * buttonCenterX == 25% reduction in size
                 // scale(float old_value, float old_min, float old_max, float new_min, float new_max)
-                CGFloat resize = fabs(scale(differenceCenterX, 0.0, differenceCenterXMax, 10.5, 42.0));
-                NSLog(@"resize == %f", resize);
-                UIImage * resizedImage = [button.currentImage imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:resize]];
+                CGFloat normalized_x = fabs(normalize(x, 0.0, CGRectGetWidth(valueScrollView.bounds))); //, 10.5, 40.0));
+                printf("\nnormalized_x == %f\n", normalized_x);
+                CGFloat repointSize = 42.0 - (42.0 * normalized_x);
+                UIImage * resizedImage = [button.currentImage imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:repointSize]];
                 [button setImage:resizedImage forState:UIControlStateNormal];
             }
             break;
