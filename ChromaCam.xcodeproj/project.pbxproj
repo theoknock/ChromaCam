@@ -10,7 +10,7 @@
 		B9CE504B2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CE504A2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m */; };
 		B9CE504E2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = B9CE504D2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c */; };
 		B9CE5051270A429400FCD024 /* ScaleSliderOverlayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CE504F270A429300FCD024 /* ScaleSliderOverlayLayer.m */; };
-		B9CE5054270A42E800FCD024 /* ScrollViewSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CE5053270A42E800FCD024 /* ScrollViewSlider.m */; };
+		B9CE5054270A42E800FCD024 /* ScrollViewContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CE5053270A42E800FCD024 /* ScrollViewContentView.m */; };
 		B9E2CF8326FFB2D7008D617E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B9E2CF8226FFB2D7008D617E /* AppDelegate.m */; };
 		B9E2CF8626FFB2D7008D617E /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B9E2CF8526FFB2D7008D617E /* SceneDelegate.m */; };
 		B9E2CF8926FFB2D7008D617E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9E2CF8826FFB2D7008D617E /* ViewController.m */; };
@@ -27,8 +27,8 @@
 		B9CE504D2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CaptureSessionConfigurationQueue.c; sourceTree = "<group>"; };
 		B9CE504F270A429300FCD024 /* ScaleSliderOverlayLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScaleSliderOverlayLayer.m; sourceTree = "<group>"; };
 		B9CE5050270A429400FCD024 /* ScaleSliderOverlayLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaleSliderOverlayLayer.h; sourceTree = "<group>"; };
-		B9CE5052270A42E800FCD024 /* ScrollViewSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScrollViewSlider.h; sourceTree = "<group>"; };
-		B9CE5053270A42E800FCD024 /* ScrollViewSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScrollViewSlider.m; sourceTree = "<group>"; };
+		B9CE5052270A42E800FCD024 /* ScrollViewContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScrollViewContentView.h; sourceTree = "<group>"; };
+		B9CE5053270A42E800FCD024 /* ScrollViewContentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScrollViewContentView.m; sourceTree = "<group>"; };
 		B9E2CF7E26FFB2D7008D617E /* ChromaCam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChromaCam.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9E2CF8126FFB2D7008D617E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B9E2CF8226FFB2D7008D617E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -54,15 +54,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B9CE5055270A444000FCD024 /* Scroll View */ = {
+		B9CE5055270A444000FCD024 /* Cemera Property Value Scroll View */ = {
 			isa = PBXGroup;
 			children = (
-				B9CE5052270A42E800FCD024 /* ScrollViewSlider.h */,
-				B9CE5053270A42E800FCD024 /* ScrollViewSlider.m */,
+				B9CE5052270A42E800FCD024 /* ScrollViewContentView.h */,
+				B9CE5053270A42E800FCD024 /* ScrollViewContentView.m */,
 				B9CE5050270A429400FCD024 /* ScaleSliderOverlayLayer.h */,
 				B9CE504F270A429300FCD024 /* ScaleSliderOverlayLayer.m */,
 			);
-			path = "Scroll View";
+			path = "Cemera Property Value Scroll View";
 			sourceTree = "<group>";
 		};
 		B9E2CF7526FFB2D7008D617E = {
@@ -89,7 +89,7 @@
 				B9E2CF8526FFB2D7008D617E /* SceneDelegate.m */,
 				B9E2CF8726FFB2D7008D617E /* ViewController.h */,
 				B9E2CF8826FFB2D7008D617E /* ViewController.m */,
-				B9CE5055270A444000FCD024 /* Scroll View */,
+				B9CE5055270A444000FCD024 /* Cemera Property Value Scroll View */,
 				B9CE50492707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.h */,
 				B9CE504A2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m */,
 				B9CE504C2707D5E600FCD024 /* CaptureSessionConfigurationQueue.h */,
@@ -174,7 +174,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9CE5054270A42E800FCD024 /* ScrollViewSlider.m in Sources */,
+				B9CE5054270A42E800FCD024 /* ScrollViewContentView.m in Sources */,
 				B9E2CF8926FFB2D7008D617E /* ViewController.m in Sources */,
 				B9E2CF8326FFB2D7008D617E /* AppDelegate.m in Sources */,
 				B9CE504E2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c in Sources */,

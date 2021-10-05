@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ScrollViewSlider : UIView
+@interface ScrollViewContentView : UIView
 
 @end
 

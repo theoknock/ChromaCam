@@ -46,67 +46,6 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
     return (new_max - new_min) * (old_value - old_min) / (old_max - old_min) + new_min;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return self.cameraControlButtons.count;
-}
-
-// Maybe To-Do: Replace by getting the image from the subview (UIButton) of the stack view with the same tag as the indexPath.item
-static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger tag) {
-    NSString * systemImageName = nil;
-    switch (tag) {
-        case CaptureDevicePropertyTorchLevel:
-            systemImageName = @"bolt.circle";
-            break;
-        case CaptureDevicePropertyLensPosition:
-            systemImageName = @"viewfinder.circle";
-            break;
-        case CaptureDevicePropertyExposureDuration:
-            systemImageName = @"timer";
-            break;
-        case CaptureDevicePropertyISO:
-            systemImageName = @"camera.aperture";
-            break;
-        case CaptureDevicePropertyZoomFactor:
-            systemImageName = @"magnifyingglass.circle";
-            break;
-        
-        default:
-            break;
-    }
-    
-    UIImage * backgroundImage = [UIImage systemImageNamed:systemImageName withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:42.0]];;
-    
-    return backgroundImage;
-};
-
-- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CameraControlCellReuseID" forIndexPath:indexPath];
-
-    UIButton * cameraControlButton = (UIButton *)[[cell.contentView subviews] firstObject];
-    [cameraControlButton setFrame:cell.contentView.bounds];
-    [cameraControlButton setTag:indexPath.item];
-    [cameraControlButton setImage:cameraControlButtonImage(indexPath.item) forState:UIControlStateNormal];
-    [cameraControlButton addTarget:self action:@selector(setCameraProperty:) forControlEvents:UIControlEventAllEvents];
-    
-    return cell;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    UICollectionViewCell * cell = [collectionView cellForItemAtIndexPath:indexPath];
-    UIButton * cameraControlButton = (UIButton *)[[cell.contentView subviews] firstObject];
-    [cameraControlButton setTag:indexPath.item];
-    [self setCameraProperty:cameraControlButton];
-}
-
-// UICollectionView To-Do:
-//          1.    When a cell is no longer centered, deselect and unhighlight the button
-//          2.    Center a cell when selected or scrolling towards the center while not dragging or tracking; select and highlight its button
-//          3.    Set horizontal content inset so all cells can be centered when selected
-//          4.    Evenly space and center cells
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -125,7 +64,7 @@ static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger
     [captureSession commitConfiguration];
     [captureSession startRunning];
     
-    [self setCameraProperty:self.lensPositionButton];
+    [self setCameraProperty:self.exposureDurationButton];
 }
 - (IBAction)setCameraProperty:(id)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -142,73 +81,73 @@ static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger
         void(^cameraPropertyConfiguration)(float) = nil;
         switch (tag) {
             case CaptureDevicePropertyTorchLevel: {
-                cameraPropertyConfiguration = ^ (UIScrollView * scrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
-                    CGPoint scrollViewContentOffset = CGPointMake(old_value * CGRectGetWidth(scrollView.bounds), scrollView.contentOffset.y);
-                    [scrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+                cameraPropertyConfiguration = ^ (UIScrollView * valueScrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
+                    CGPoint scrollViewContentOffset = CGPointMake(old_value * CGRectGetWidth(valueScrollView.bounds), valueScrollView.contentOffset.y);
+                    [valueScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
                     
                     return ^ void (float offset) {
-                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(scrollView.bounds), old_min, old_max), old_max));
+                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(valueScrollView.bounds), old_min, old_max), old_max));
                         if (new_value != 0.0 && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious))
                             [cd setTorchModeOnWithLevel:new_value error:nil];
                         else
                             [cd setTorchMode:AVCaptureTorchModeOff];
                     };
-                }(self.scrollView, captureDevice, [captureDevice torchLevel], 0.0, 1.0);
+                }(self.valueScrollView, captureDevice, [captureDevice torchLevel], 0.0, 1.0);
                 break;
             }
             case CaptureDevicePropertyLensPosition: {
-                cameraPropertyConfiguration = ^ (UIScrollView * scrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
-                    CGPoint scrollViewContentOffset = CGPointMake(old_value * CGRectGetWidth(scrollView.bounds), scrollView.contentOffset.y);
-                    [scrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+                cameraPropertyConfiguration = ^ (UIScrollView * valueScrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
+                    CGPoint scrollViewContentOffset = CGPointMake(old_value * CGRectGetWidth(valueScrollView.bounds), valueScrollView.contentOffset.y);
+                    [valueScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
                     
                     return ^ void (float offset) {
-                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(scrollView.bounds), old_min, old_max), old_max));
+                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(valueScrollView.bounds), old_min, old_max), old_max));
                         [cd setFocusModeLockedWithLensPosition:new_value completionHandler:nil];
                     };
-                }(self.scrollView, captureDevice, captureDevice.lensPosition, 0.0, 1.0);
+                }(self.valueScrollView, captureDevice, captureDevice.lensPosition, 0.0, 1.0);
                 break;
             }
             case CaptureDevicePropertyExposureDuration: {
-                cameraPropertyConfiguration = ^ (UIScrollView * scrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
+                cameraPropertyConfiguration = ^ (UIScrollView * valueScrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
                     float normalized_value = normalize(old_value, old_min, old_max);
-                    float offset_value     = normalized_value * CGRectGetWidth(scrollView.bounds);
-                    CGPoint scrollViewContentOffset = CGPointMake(offset_value, scrollView.contentOffset.y);
-                    [scrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+                    float offset_value     = normalized_value * CGRectGetWidth(valueScrollView.bounds);
+                    CGPoint scrollViewContentOffset = CGPointMake(offset_value, valueScrollView.contentOffset.y);
+                    [valueScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
                     
                     return ^ void (float offset) {
-                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(scrollView.bounds), old_min, old_max), old_max));
+                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(valueScrollView.bounds), old_min, old_max), old_max));
                         CMTime exposureDurationValue = CMTimeMakeWithSeconds(new_value, 1000*1000*1000);
                         [cd setExposureModeCustomWithDuration:exposureDurationValue ISO:AVCaptureISOCurrent completionHandler:nil];
                     };
-                }(self.scrollView, captureDevice, CMTimeGetSeconds([captureDevice exposureDuration]), CMTimeGetSeconds(captureDevice.activeFormat.minExposureDuration), 1.0/3.0);
+                }(self.valueScrollView, captureDevice, CMTimeGetSeconds([captureDevice exposureDuration]), CMTimeGetSeconds(captureDevice.activeFormat.minExposureDuration), 1.0/3.0);
                 break;
             }
             case CaptureDevicePropertyISO: {
-                cameraPropertyConfiguration = ^ (UIScrollView * scrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
+                cameraPropertyConfiguration = ^ (UIScrollView * valueScrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
                     float normalized_value = normalize(old_value, old_min, old_max);
-                    float offset_value     = normalized_value * CGRectGetWidth(scrollView.bounds);
-                    CGPoint scrollViewContentOffset = CGPointMake(offset_value, scrollView.contentOffset.y);
-                    [scrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+                    float offset_value     = normalized_value * CGRectGetWidth(valueScrollView.bounds);
+                    CGPoint scrollViewContentOffset = CGPointMake(offset_value, valueScrollView.contentOffset.y);
+                    [valueScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
                     
                     return ^ void (float offset) {
-                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(scrollView.bounds), old_min, old_max), old_max));
+                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(valueScrollView.bounds), old_min, old_max), old_max));
                         [cd setExposureModeCustomWithDuration:captureDevice.exposureDuration ISO:new_value completionHandler:nil];
                     };
-                }(self.scrollView, captureDevice, captureDevice.ISO, captureDevice.activeFormat.minISO, captureDevice.activeFormat.maxISO);
+                }(self.valueScrollView, captureDevice, captureDevice.ISO, captureDevice.activeFormat.minISO, captureDevice.activeFormat.maxISO);
                 break;
             }
             case CaptureDevicePropertyZoomFactor: {
-                cameraPropertyConfiguration = ^(UIScrollView * scrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
+                cameraPropertyConfiguration = ^(UIScrollView * valueScrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
                     float normalized_value = normalize(old_value, old_min, old_max);
-                    float offset_value     = normalized_value * CGRectGetWidth(scrollView.bounds);
-                    CGPoint scrollViewContentOffset = CGPointMake(offset_value, scrollView.contentOffset.y);
-                    [scrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+                    float offset_value     = normalized_value * CGRectGetWidth(valueScrollView.bounds);
+                    CGPoint scrollViewContentOffset = CGPointMake(offset_value, valueScrollView.contentOffset.y);
+                    [valueScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
                     
                     return ^ void (float offset) {
-                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(scrollView.bounds), old_min, old_max), old_max));
+                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(valueScrollView.bounds), old_min, old_max), old_max));
                         [cd setVideoZoomFactor:new_value];
                     };
-                }(self.scrollView, captureDevice, captureDevice.videoZoomFactor, captureDevice.minAvailableVideoZoomFactor, captureDevice.maxAvailableVideoZoomFactor);
+                }(self.valueScrollView, captureDevice, captureDevice.videoZoomFactor, captureDevice.minAvailableVideoZoomFactor, captureDevice.maxAvailableVideoZoomFactor);
                 break;
             }
             default:
@@ -226,20 +165,20 @@ static UIImage * (^cameraControlButtonImage)(NSInteger) = ^ UIImage * (NSInteger
 }
 
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+- (void)scrollViewWillBeginDragging:(UIScrollView *)valueScrollView
 {
     [captureDevice lockForConfiguration:nil];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (void)scrollViewDidScroll:(UIScrollView *)valueScrollView
 {
-    if ((scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating))
+    if ((valueScrollView.isDragging || valueScrollView.isTracking || valueScrollView.isDecelerating))
     {
-        configureCameraProperty(scrollView.contentOffset.x);
+        configureCameraProperty(valueScrollView.contentOffset.x);
     }
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)valueScrollView
 {
     [captureDevice unlockForConfiguration];
 }

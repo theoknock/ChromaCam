@@ -5,14 +5,14 @@
 //  Created by Xcode Developer on 10/3/21.
 //
 
-#import "ScrollViewSlider.h"
+#import "ScrollViewContentView.h"
 #import "ScaleSliderOverlayLayer.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <CoreText/CoreText.h>
 
 
-@implementation ScrollViewSlider
+@implementation ScrollViewContentView
 
 + (Class)layerClass
 {

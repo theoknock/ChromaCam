@@ -8,14 +8,14 @@
 #import <UIKit/UIKit.h>
 
 #import "UIView+AVCaptureVideoPreviewLayer.h"
-#import "ScrollViewSlider.h"
+#import "ScrollViewContentView.h"
 
-@interface ViewController : UIViewController <UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
+@interface ViewController : UIViewController <UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView * captureVideoPreview;
 @property (weak, nonatomic) IBOutlet UIView *scrollViewControl;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet ScrollViewSlider *scrollViewSlider;
+@property (weak, nonatomic) IBOutlet ScrollViewContentView *scrollViewSlider;
 @property (weak, nonatomic) IBOutlet UIStackView *cameraControlButtonsStackView;
 @property (weak, nonatomic) IBOutlet UIButton *torchLevelButton;
 @property (weak, nonatomic) IBOutlet UIButton *lensPositionButton;
@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *ISOButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomFactorButton;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cameraControlButtons;
+@property (weak, nonatomic) IBOutlet UIScrollView *valueScrollView;
+@property (weak, nonatomic) IBOutlet ScrollViewContentView *valueContentView;
 
 @end
 
