@@ -12,11 +12,8 @@
 
 @interface ViewController : UIViewController <UIScrollViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UIScrollView *propertyScrollView;
 @property (weak, nonatomic) IBOutlet UIView * captureVideoPreview;
-@property (weak, nonatomic) IBOutlet UIView *scrollViewControl;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet ScrollViewContentView *scrollViewSlider;
-@property (weak, nonatomic) IBOutlet UIStackView *cameraControlButtonsStackView;
 @property (weak, nonatomic) IBOutlet UIButton *torchLevelButton;
 @property (weak, nonatomic) IBOutlet UIButton *lensPositionButton;
 @property (weak, nonatomic) IBOutlet UIButton *exposureDurationButton;

@@ -344,6 +344,7 @@
                         <outlet property="captureVideoPreview" destination="0kB-bU-dhr" id="5oW-qV-ysx"/>
                         <outlet property="exposureDurationButton" destination="2PL-7G-Xw5" id="det-Ld-L1D"/>
                         <outlet property="lensPositionButton" destination="aL6-zp-eUp" id="no1-R9-buw"/>
+                        <outlet property="propertyScrollView" destination="hyR-Lm-v0c" id="ivK-e6-Cle"/>
                         <outlet property="torchLevelButton" destination="Px9-an-ysB" id="Zf6-eJ-E0r"/>
                         <outlet property="valueContentView" destination="AUn-31-wbz" id="t2c-he-Bk8"/>
                         <outlet property="valueScrollView" destination="l4j-o2-yms" id="CzL-za-8gb"/>

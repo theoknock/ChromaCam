@@ -64,7 +64,7 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
     [captureSession commitConfiguration];
     [captureSession startRunning];
     
-    [self setCameraProperty:self.exposureDurationButton];
+    [self setCameraProperty:self.torchLevelButton];
 }
 - (IBAction)setCameraProperty:(id)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -77,9 +77,16 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
         [(UIButton *)sender setSelected:TRUE];
         [(UIButton *)sender setHighlighted:TRUE];
         
-        NSInteger tag = [sender tag];
-        void(^cameraPropertyConfiguration)(float) = nil;
-        switch (tag) {
+        // To-Do: Convert the center x value of a button to its equivalent within its parent view
+//        CGPoint propertyButtonCenter = CGPointMake([(UIButton *)sender bounds].size.width / 2.0, CGRectGetMidY([(UIButton *)sender bounds]));
+//        CGPoint propertyScrollViewOffset = [(UIButton *)sender convertPoint:propertyButtonCenter toView:self.propertyScrollView];
+//                                                   //        CGPoint propertyScrollViewPoint = [self.propertyScrollView convertPoint:propertyButtonCenter fromView:(UIButton *)sender ];
+                                                   CGPoint scrollViewContentOffset = CGPointMake([(UIButton *)sender bounds].size.width * [sender tag], self.propertyScrollView.contentOffset.y);
+                                                   [self.propertyScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+        NSLog(@"%f\n\t%f", scrollViewContentOffset.x, CGRectGetWidth(self.propertyScrollView.bounds));
+                                                   NSInteger tag = [sender tag];
+                                                   void(^cameraPropertyConfiguration)(float) = nil;
+                                                   switch (tag) {
             case CaptureDevicePropertyTorchLevel: {
                 cameraPropertyConfiguration = ^ (UIScrollView * valueScrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
                     CGPoint scrollViewContentOffset = CGPointMake(old_value * CGRectGetWidth(valueScrollView.bounds), valueScrollView.contentOffset.y);
@@ -153,8 +160,8 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
             default:
                 break;
         }
-        
-        configureCameraProperty = ^ (void(^cameraPropertySetter)(float)) {
+                                                   
+                                                   configureCameraProperty = ^ (void(^cameraPropertySetter)(float)) {
             return ^ void (float x) {
                 dispatch_async(capture_session_configuration_queue_ref(), ^{
                     cameraPropertySetter(x);
