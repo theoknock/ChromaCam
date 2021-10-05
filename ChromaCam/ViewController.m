@@ -197,23 +197,24 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    switch (scrollView.tag) {
-        case 0: {
-            [UIView animateWithDuration:0.25 animations:^{
-                [self.valueScrollView setAlpha:0.0];
-            }];
-            
-            break;
-        }
-            
-        case 1: {
-            [captureDevice lockForConfiguration:nil];
-            break;
-        }
-            
-        default:
-            break;
-    }
+    [captureDevice lockForConfiguration:nil];
+//    switch (scrollView.tag) {
+//        case 0: {
+//            [UIView animateWithDuration:0.25 animations:^{
+//                [self.valueScrollView setAlpha:0.0];
+//            }];
+//            
+//            break;
+//        }
+//            
+//        case 1: {
+//            [captureDevice lockForConfiguration:nil];
+//            break;
+//        }
+//            
+//        default:
+//            break;
+//    }
     
 }
 
@@ -256,23 +257,10 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
+//    [UIView animateWithDuration:0.5 animations:^{
+//        [self.valueScrollView setAlpha:1.0];
+//    }];
     
-    switch (scrollView.tag) {
-        case 0: {
-            [UIView animateWithDuration:0.5 animations:^{
-                [self.valueScrollView setAlpha:1.0];
-            }];
-            break;
-        }
-            
-        case 1: {
-            //
-            break;
-        }
-            
-        default:
-            break;
-    }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
