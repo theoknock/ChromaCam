@@ -75,6 +75,11 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
 
 - (IBAction)setCameraProperty:(id)sender {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.valueScrollView setAlpha:0.0];
+        } completion:^(BOOL finished) {
+            [captureDevice unlockForConfiguration];
+        }];
         
         CGPoint scrollViewContentOffset = CGPointMake([(UIButton *)sender bounds].size.width * [sender tag], self.propertyScrollView.contentOffset.y);
         [self.propertyScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
@@ -191,6 +196,12 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
                 });
             };
         }(cameraPropertyConfiguration);
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            [self.valueScrollView setAlpha:1.0];
+        } completion:^(BOOL finished) {
+            [captureDevice lockForConfiguration:nil];
+        }];
     });
 }
 
@@ -253,14 +264,6 @@ static float scale(float old_value, float old_min, float old_max, float new_min,
         default:
             break;
     }
-}
-
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
-{
-//    [UIView animateWithDuration:0.5 animations:^{
-//        [self.valueScrollView setAlpha:1.0];
-//    }];
-    
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
