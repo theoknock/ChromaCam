@@ -27,7 +27,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yjl-ex-C71" userLabel="Bottom View">
                                 <rect key="frame" x="0.0" y="736" width="414" height="126"/>
                                 <subviews>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hyR-Lm-v0c" userLabel="Property Scroll View">
+                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hyR-Lm-v0c" userLabel="Property Scroll View">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
                                         <subviews>
                                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zHT-nV-MLI" userLabel="Property Content View">
@@ -43,7 +43,7 @@
                                                                 <state key="normal">
                                                                     <imageReference key="image" image="bolt.circle" catalog="system" renderingMode="hierarchical">
                                                                         <hierarchicalColors>
-                                                                            <color systemColor="systemBlueColor"/>
+                                                                            <color systemColor="secondaryLabelColor"/>
                                                                             <color white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <color systemColor="systemGrayColor"/>
                                                                         </hierarchicalColors>
@@ -234,6 +234,9 @@
         <image name="magnifyingglass.circle" catalog="system" width="128" height="121"/>
         <image name="timer" catalog="system" width="128" height="121"/>
         <image name="viewfinder.circle" catalog="system" width="128" height="121"/>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
