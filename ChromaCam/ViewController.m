@@ -43,12 +43,13 @@ typedef enum : NSUInteger {
     CaptureDeviceConfigurationControlPropertyFocusNext
 } CaptureDeviceConfigurationControlPropertyFocus;
 
-static CaptureDeviceConfigurationControlProperty (^CaptureDeviceConfigurationPropertyControlTag)(UIScrollView *, UIStackView *) = ^ CaptureDeviceConfigurationControlProperty (UIScrollView * control_view_parent, UIStackView * control_view) {
-    float scaled_control_view_parent_content_offset = scale(control_view_parent.contentOffset.x, 0.0, control_view_parent.contentSize.width, 0.0, control_view.bounds.size.width);
-    float button_center_width                       = control_view.bounds.size.width / control_view.subviews.count;
-    float center_button_tag                         = scaled_control_view_parent_content_offset / button_center_width;
+static CaptureDeviceConfigurationControlProperty (^CaptureDeviceConfigurationPropertyControlFocusTarget)(UIScrollView *, UIStackView *, CGFloat) = ^ CaptureDeviceConfigurationControlProperty (UIScrollView * control_view_parent, UIStackView * control_view, CGFloat control_view_parent_target_offset) {
+//    float scaled_control_view_parent_content_offset = scale(control_view_parent.contentOffset.x, 0.0, control_view_parent.contentSize.width, 0.0, control_view.bounds.size.width);
+    float button_center_width = control_view_parent.bounds.size.width / control_view.subviews.count;
+    float center_button_tag   = control_view_parent.contentOffset.x / button_center_width;
+    CaptureDeviceConfigurationControlProperty target_control_property = (control_view_parent.contentOffset.x <= control_view_parent_target_offset) ? floor(center_button_tag) : ceil(center_button_tag);
     
-    return (CaptureDeviceConfigurationControlProperty)(control_view_parent.contentOffset.x <= (control_view_parent.contentSize.width / 2.0)) ? floor(center_button_tag) : ceil(center_button_tag);
+    return target_control_property;
 };
 
 static CGPoint (^CaptureDeviceConfigurationPropertyControlPosition)(UIScrollView *, UIStackView *, CaptureDeviceConfigurationControlProperty) = ^ CGPoint (UIScrollView * control_view_parent, UIStackView * control_view, CaptureDeviceConfigurationControlProperty control_property) {
@@ -98,25 +99,13 @@ static CGPoint (^CaptureDeviceConfigurationPropertyControlPosition)(UIScrollView
 }
 
 - (IBAction)setCameraProperty:(id)sender {
+    CaptureDeviceConfigurationControlProperty sender_control_property = (CaptureDeviceConfigurationControlProperty)((UIButton *)sender).tag;
+    
     [UIView animateWithDuration:0.25 animations:^{
         [self.valueScrollView setAlpha:0.0];
     } completion:^(BOOL finished) {
         [captureDevice unlockForConfiguration];
-    }];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        CaptureDeviceConfigurationControlProperty sender_control_property = (CaptureDeviceConfigurationControlProperty)((UIButton *)sender).tag;
         
-        CGPoint scrollViewContentOffset = CGPointMake([(UIButton *)sender bounds].size.width * sender_control_property, self.propertyScrollView.contentOffset.y);
-        [self.propertyScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
-        
-        for (UIButton * button in self.cameraControlButtons)
-        {
-            BOOL select_highlight_state = ((button.tag == sender_control_property) ? TRUE : FALSE);
-            [button setSelected:select_highlight_state];
-            [button setHighlighted:select_highlight_state];
-        }
-    
         void(^cameraPropertyConfiguration)(float) = nil;
         switch (sender_control_property) {
             case CaptureDeviceConfigurationControlPropertyTorchLevel: {
@@ -201,18 +190,38 @@ static CGPoint (^CaptureDeviceConfigurationPropertyControlPosition)(UIScrollView
             };
         }(cameraPropertyConfiguration);
         
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.25 animations:^{
             [self.valueScrollView setAlpha:1.0];
+            for (UIButton * button in self.cameraControlButtons)
+            {
+                BOOL select_highlight_state = ((button.tag == sender_control_property) ? TRUE : FALSE);
+                [button setSelected:select_highlight_state];
+                [button setHighlighted:select_highlight_state];
+            }
         } completion:^(BOOL finished) {
             [captureDevice lockForConfiguration:nil];
         }];
-    });
+    }];
+    
+//        CGPoint scrollViewContentOffset = CGPointMake([(UIButton *)sender bounds].size.width * sender_control_property, self.propertyScrollView.contentOffset.y);
+//        [self.propertyScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     switch (scrollView.tag) {
-        case 1: {
+        case CaptureDeviceConfigurationControlTypeProperty: {
+            if ((scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating))
+            {
+                CaptureDeviceConfigurationControlProperty control_property = CaptureDeviceConfigurationPropertyControlFocusTarget(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject), scrollView.contentOffset.x);
+                for (UIButton * button in (NSArray<UIButton *> *)[((scrollView.subviews.firstObject).subviews.firstObject) subviews])
+                {
+                    [button setHighlighted:(button.tag == control_property)];
+                }
+            }
+            break;
+        }
+        case CaptureDeviceConfigurationControlTypeValue: {
             if ((scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating))
             {
                 configureCameraProperty(scrollView.contentOffset.x);
@@ -231,14 +240,22 @@ static CGPoint (^CaptureDeviceConfigurationPropertyControlPosition)(UIScrollView
 //    return [[formatter stringFromNumber:[NSNumber numberWithFloat:float_value]] integerValue];
 //};
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    // targetContentOffset tells you which direction the scrollview is scrolling when compared against
+    // the scrollview contentOffset x-position
+    // Once the target control position is calculated, then the targetContentOffset property can be updated with it
+    
     switch (scrollView.tag) {
         case 0: {
-            CaptureDeviceConfigurationControlProperty control_property = CaptureDeviceConfigurationPropertyControlTag(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject));
+            CaptureDeviceConfigurationControlProperty control_property = CaptureDeviceConfigurationPropertyControlFocusTarget(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject), targetContentOffset->x);
+            printf("\n%lu\tcurrent offset == %f\n", control_property, scrollView.contentOffset.x);
+            printf("\n%lu\ttarget offset == %f\n", control_property, targetContentOffset->x);
+            *targetContentOffset = CaptureDeviceConfigurationPropertyControlPosition(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject), control_property);
 //            [self.propertyScrollView setContentOffset:CaptureDeviceConfigurationPropertyControlPosition(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject), control_property) animated:TRUE];
-            [self setCameraProperty:(UIButton *)[self.propertyButtonsStackView viewWithTag:control_property]];
-            NSLog(@"control_property == %lu", control_property);
+//            [self setCameraProperty:(UIButton *)[self.propertyButtonsStackView viewWithTag:control_property]];
+            printf("\n%lu\ttarget offset == %f\n", control_property, targetContentOffset->x);
+            printf("\n------------------------------------\n");
             break;
         }
             
