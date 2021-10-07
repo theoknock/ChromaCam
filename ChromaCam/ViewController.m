@@ -47,7 +47,8 @@ static CaptureDeviceConfigurationControlProperty (^CaptureDeviceConfigurationPro
 //    float scaled_control_view_parent_content_offset = scale(control_view_parent.contentOffset.x, 0.0, control_view_parent.contentSize.width, 0.0, control_view.bounds.size.width);
     float button_center_width = control_view_parent.bounds.size.width / control_view.subviews.count;
     float center_button_tag   = control_view_parent.contentOffset.x / button_center_width;
-    CaptureDeviceConfigurationControlProperty target_control_property = (control_view_parent.contentOffset.x <= control_view_parent_target_offset) ? floor(center_button_tag) : ceil(center_button_tag);
+    CGFloat button_center_position_x_scaled = scale(center_button_tag, 0.0, control_view_parent.bounds.size.width, 0.0, control_view.bounds.size.width);
+    CaptureDeviceConfigurationControlProperty target_control_property = (control_view_parent.contentOffset.x >= control_view_parent_target_offset) ? ceil(button_center_position_x_scaled) : floor(button_center_position_x_scaled);
     
     return target_control_property;
 };
