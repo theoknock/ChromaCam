@@ -44,28 +44,33 @@ typedef enum : NSUInteger {
 } CaptureDeviceConfigurationControlPropertyFocus;
 
 typedef enum : NSUInteger {
-    CaptureDeviceConfigurationControlHorizontalDirectionRight,
-    CaptureDeviceConfigurationControlHorizontalDirectionLeft
-} CaptureDeviceConfigurationControlHorizontalDirection;
+    CaptureDeviceConfigurationControlCenterOffsetDirectionRight,
+    CaptureDeviceConfigurationControlCenterOffsetDirectionLeft,
+    CaptureDeviceConfigurationControlCenterOffsetDirectionNone
+} CaptureDeviceConfigurationControlCenterOffsetDirection;
+
+typedef enum : NSUInteger {
+    CaptureDeviceConfigurationControlHorizontalScrollingDirectionRight,
+    CaptureDeviceConfigurationControlHorizontalScrollingDirectionLeft,
+    CaptureDeviceConfigurationControlHorizontalScrollingDirectionNone
+} CaptureDeviceConfigurationControlHorizontalScrollingDirection;
 
 
-static CaptureDeviceConfigurationControlProperty (^CaptureDeviceConfigurationPropertyControlFocusTarget)(UIScrollView *, UIStackView *, CaptureDeviceConfigurationControlHorizontalDirection) = ^ CaptureDeviceConfigurationControlProperty (UIScrollView * control_view_parent, UIStackView * control_view, CaptureDeviceConfigurationControlHorizontalDirection control_direction) {
-    CGFloat content_offset_x                = fmaxf(0.0, fminf(control_view_parent.contentOffset.x, control_view_parent.contentSize.width));
+static void (^CaptureDeviceConfigurationPropertyControlFocusTarget)(UIScrollView *, UIStackView *, CaptureDeviceConfigurationControlHorizontalScrollingDirection, CaptureDeviceConfigurationControlProperty *, CaptureDeviceConfigurationControlProperty *) = ^ void (UIScrollView * control_view_parent, UIStackView * control_view, CaptureDeviceConfigurationControlHorizontalScrollingDirection control_direction, CaptureDeviceConfigurationControlProperty * control_property_select, CaptureDeviceConfigurationControlProperty * control_property_deselect) {
+    CGFloat content_offset_x                = fmaxf(0.0, fminf(control_view_parent.contentOffset.x, control_view_parent.bounds.size.width));
     CGFloat button_width                    = control_view_parent.bounds.size.width / control_view.subviews.count;
-    CGFloat center_button_tag               = content_offset_x / button_width;
-    CGFloat button_center_position_x_scaled = scale(center_button_tag, 0.0, control_view_parent.bounds.size.width, 0.0, control_view.bounds.size.width);
-    CaptureDeviceConfigurationControlProperty target_control_property = (control_direction == CaptureDeviceConfigurationControlHorizontalDirectionRight) ? floor(button_center_position_x_scaled) : ceil(button_center_position_x_scaled);
-    
-    return MIN(target_control_property, (control_view.subviews.count - 1));
+    CGFloat center_button_tag               = floor(content_offset_x / button_width);
+    *control_property_select   = MAX(0, MIN((control_direction == CaptureDeviceConfigurationControlHorizontalScrollingDirectionRight) ? center_button_tag     : center_button_tag + 1, (control_view.subviews.count - 1)));
+    *control_property_deselect = MAX(0, MIN((control_direction == CaptureDeviceConfigurationControlHorizontalScrollingDirectionRight) ? center_button_tag + 1 : center_button_tag, (control_view.subviews.count - 1)));
 };
 
 static CGPoint (^CaptureDeviceConfigurationPropertyControlPosition)(UIScrollView *, UIStackView *, CaptureDeviceConfigurationControlProperty) = ^ CGPoint (UIScrollView * control_view_parent, UIStackView * control_view, CaptureDeviceConfigurationControlProperty control_property) {
     CGFloat button_center_width             = control_view_parent.bounds.size.width / control_view.subviews.count;
     CGFloat center_button_position          = button_center_width * control_property;
-//    CGFloat button_center_position_x_scaled = scale(center_button_tag, 0.0, control_view_parent.bounds.size.width, 0.0, control_view.bounds.size.width);
-//    CGFloat button_center_position_x_offset =
+    //    CGFloat button_center_position_x_scaled = scale(center_button_tag, 0.0, control_view_parent.bounds.size.width, 0.0, control_view.bounds.size.width);
+    //    CGFloat button_center_position_x_offset =
     CGPoint button_center_position_point    = CGPointMake(center_button_position, control_view_parent.contentOffset.y);
-
+    
     return button_center_position_point;
 };
 
@@ -77,7 +82,7 @@ static CGPoint (^CaptureDeviceConfigurationPropertyControlPosition)(UIScrollView
     AVCaptureConnection  * captureConnection;
     
     void (^configureCameraProperty)(float);
-//    CaptureDeviceConfigurationControlHorizontalDirection(^(^scrollViewDirection)(CGFloat))(CGFloat *, CGFloat);
+    //    CaptureDeviceConfigurationControlHorizontalDirection(^(^scrollViewDirection)(CGFloat))(CGFloat *, CGFloat);
     void (^scrollViewDirection)(CGFloat);
 }
 
@@ -213,31 +218,28 @@ static CGPoint (^CaptureDeviceConfigurationPropertyControlPosition)(UIScrollView
         }];
     }];
     
-//        CGPoint scrollViewContentOffset = CGPointMake([(UIButton *)sender bounds].size.width * sender_control_property, self.propertyScrollView.contentOffset.y);
-//        [self.propertyScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+    //        CGPoint scrollViewContentOffset = CGPointMake([(UIButton *)sender bounds].size.width * sender_control_property, self.propertyScrollView.contentOffset.y);
+    //        [self.propertyScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     switch (scrollView.tag) {
         case CaptureDeviceConfigurationControlTypeProperty: {
             __block CGFloat content_offset_x_last = scrollView.contentOffset.x;
-            __block CaptureDeviceConfigurationControlProperty control_property_last = 0;
             scrollViewDirection = ^ void (CGFloat content_offset_x_current) {
-                CaptureDeviceConfigurationControlHorizontalDirection control_direction = (content_offset_x_current < content_offset_x_last) ? CaptureDeviceConfigurationControlHorizontalDirectionLeft : CaptureDeviceConfigurationControlHorizontalDirectionRight;
-                CaptureDeviceConfigurationControlProperty control_property = CaptureDeviceConfigurationPropertyControlFocusTarget(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject), control_direction);
-                
-                if (control_property != control_property_last) {
-                    UIButton * last_button = [self.cameraControlButtons objectAtIndex:control_property_last];
+                CaptureDeviceConfigurationControlHorizontalScrollingDirection scrolling_direction = (content_offset_x_current == content_offset_x_last) ? CaptureDeviceConfigurationControlHorizontalScrollingDirectionNone : (content_offset_x_current > content_offset_x_last) ? CaptureDeviceConfigurationControlHorizontalScrollingDirectionLeft : CaptureDeviceConfigurationControlHorizontalScrollingDirectionRight;
+                if (scrolling_direction != CaptureDeviceConfigurationControlHorizontalScrollingDirectionNone) {
+                    CaptureDeviceConfigurationControlProperty control_property_select   = 0;
+                    CaptureDeviceConfigurationControlProperty control_property_deselect = 0;
+                    CaptureDeviceConfigurationPropertyControlFocusTarget(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject), scrolling_direction, &control_property_select, &control_property_deselect);
+                    
+                    UIButton * last_button = [self.cameraControlButtons objectAtIndex:control_property_deselect];
                     [last_button setSelected:FALSE];
                     [last_button setHighlighted:FALSE];
                     
-                    
-                    UIButton * current_button = [self.cameraControlButtons objectAtIndex:control_property];
+                    UIButton * current_button = [self.cameraControlButtons objectAtIndex:control_property_select];
                     [current_button setSelected:TRUE];
                     [current_button setHighlighted:TRUE];
-                    
-                    content_offset_x_last = content_offset_x_current;
-                    control_property_last = control_property;
                 }
             };
             break;
@@ -245,12 +247,11 @@ static CGPoint (^CaptureDeviceConfigurationPropertyControlPosition)(UIScrollView
         default:
             break;
     }
-    
 }
 
-CGFloat (^captureDeviceConfigurationControlTransform)(CGFloat, CGFloat, CGFloat, CGFloat) = ^ CGFloat (CGFloat content_offset_x, CGFloat content_size_width, CGFloat button_index, CGFloat button_count) {
+static const CGFloat (^captureDeviceConfigurationControlTransform)(CGFloat, CGFloat, CGFloat, CGFloat) = ^ CGFloat (CGFloat content_offset_x, CGFloat content_size_width, CGFloat button_index, CGFloat button_count) {
     CGFloat n = normalize(content_offset_x, 0.0, content_size_width); // check to see if midpoint of content_size_width is 0.5 when normalized
-    CGFloat v = 0.5;
+    CGFloat v = 0.5625;
     CGFloat x = normalize(((content_size_width / button_count) * button_index), 0.0, content_size_width); // x is the point along the curve where a button's midpoint lies
     CGFloat control_height = exp(-( (pow(x - n, 2.0)) / (pow(v, 2.0)) ));
     
@@ -263,25 +264,26 @@ CGFloat (^captureDeviceConfigurationControlTransform)(CGFloat, CGFloat, CGFloat,
     {
         switch (scrollView.tag) {
             case CaptureDeviceConfigurationControlTypeProperty: {
-                if ((scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating))
-                {
-//                    scrollViewDirection(fmaxf(0.0, fminf(scrollView.contentOffset.x, scrollView.contentSize.width)));
-                    for (UIButton * button in self.cameraControlButtons) {
-                        CGFloat resize = captureDeviceConfigurationControlTransform(scrollView.contentOffset.x, scrollView.bounds.size.width, button.tag, 5.0) * scrollView.bounds.size.height;
-                        UIImage * resizedImage = [button.currentImage imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:resize]];
-                        [button setImage:resizedImage forState:UIControlStateNormal];
-                    }
+                for (UIButton * button in self.cameraControlButtons) {
+                    CGFloat y = captureDeviceConfigurationControlTransform(scrollView.contentOffset.x, scrollView.bounds.size.width, button.tag, 5.0);
+                    CGFloat resize = y * scrollView.bounds.size.height;
+                    UIImage * resizedImage = [button.currentImage imageByApplyingSymbolConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:resize]];
+                    [button setImage:resizedImage forState:UIControlStateNormal];
+                    [button setAlpha:y/1.1];
                 }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    scrollViewDirection(fmaxf(0.0, fminf(scrollView.contentOffset.x, scrollView.bounds.size.width)));
+                });
+
+                break;
+            }
+                
+            case CaptureDeviceConfigurationControlTypeValue: {
+                configureCameraProperty(scrollView.contentOffset.x);
                 
                 break;
             }
-            case CaptureDeviceConfigurationControlTypeValue: {
-                if ((scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating))
-                {
-                    configureCameraProperty(scrollView.contentOffset.x);
-                }
-                break;
-            }
+                
             default:
                 break;
         }
@@ -290,23 +292,23 @@ CGFloat (^captureDeviceConfigurationControlTransform)(CGFloat, CGFloat, CGFloat,
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
-//    switch (scrollView.tag) {
-//        case 0: {
-//            CaptureDeviceConfigurationControlProperty control_property = CaptureDeviceConfigurationPropertyControlFocusTarget(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject), targetContentOffset->x);
-//            printf("\n%lu\tcurrent offset == %f\n", control_property, scrollView.contentOffset.x);
-//            printf("\n%lu\ttarget offset == %f\n", control_property, targetContentOffset->x);
-//            *targetContentOffset = CaptureDeviceConfigurationPropertyControlPosition(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject), control_property);
-//            printf("\n%lu\ttarget offset == %f\n", control_property, targetContentOffset->x);
-//            printf("\n------------------------------------\n");
-//
-//            //            [self setCameraProperty:(UIButton *)[self.propertyButtonsStackView viewWithTag:control_property]];
-//
-//            break;
-//        }
-//
-//        default:
-//            break;
-//    }
+    //    switch (scrollView.tag) {
+    //        case 0: {
+    //            CaptureDeviceConfigurationControlProperty control_property = CaptureDeviceConfigurationPropertyControlFocusTarget(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject), targetContentOffset->x);
+    //            printf("\n%lu\tcurrent offset == %f\n", control_property, scrollView.contentOffset.x);
+    //            printf("\n%lu\ttarget offset == %f\n", control_property, targetContentOffset->x);
+    //            *targetContentOffset = CaptureDeviceConfigurationPropertyControlPosition(scrollView, (UIStackView *)((scrollView.subviews.firstObject).subviews.firstObject), control_property);
+    //            printf("\n%lu\ttarget offset == %f\n", control_property, targetContentOffset->x);
+    //            printf("\n------------------------------------\n");
+    //
+    //            //            [self setCameraProperty:(UIButton *)[self.propertyButtonsStackView viewWithTag:control_property]];
+    //
+    //            break;
+    //        }
+    //
+    //        default:
+    //            break;
+    //    }
 }
 
 @end
