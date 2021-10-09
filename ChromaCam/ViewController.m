@@ -113,10 +113,7 @@ typedef enum : NSUInteger {
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    return CGSizeMake(self.collectionView.frame.size.width*0.6, self.collectionView.frame.size.height*0.6);
-}
-- (void)collectionView:(UICollectionView *)collectionView prefetchItemsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths{
-    
+    return CGSizeMake(collectionView.bounds.size.width/3, collectionView.bounds.size.height);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
@@ -163,7 +160,6 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
 };
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    printf("%s\n", __PRETTY_FUNCTION__);
     UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CollectionViewCellReuseID" forIndexPath:indexPath];
     UIButton * property_control_button = (UIButton *)cell.contentView.subviews.firstObject;
     [property_control_button setTag:indexPath.item];
@@ -174,7 +170,6 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
 }
 
 - (IBAction)configureCaptureDeviceProperty:(UIButton *)sender forEvent:(UIEvent *)event {
-    printf("%s\n", __PRETTY_FUNCTION__);
     CaptureDeviceConfigurationControlProperty sender_control_property = (CaptureDeviceConfigurationControlProperty)sender.tag;
     
     [UIView animateWithDuration:0.25 animations:^{
