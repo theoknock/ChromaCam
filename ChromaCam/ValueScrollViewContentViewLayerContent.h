@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ScaleSliderOverlayLayer : CALayer
+@interface ValueScrollViewContentViewLayerContent : CALayer
 
 @end
 

@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ScrollViewContentView : UIView
+@interface ValueScrollViewContentView : UIView
 
 @end
 

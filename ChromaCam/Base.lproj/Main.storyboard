@@ -6,6 +6,7 @@
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,152 +18,73 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-bU-dhr" userLabel="Capture Video Preview">
+                            <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-bU-dhr" userLabel="Capture Video Preview">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="0kB-bU-dhr" secondAttribute="height" multiplier="9:16" id="nEo-i9-wcK"/>
                                 </constraints>
                             </view>
-                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yjl-ex-C71" userLabel="Bottom View">
+                            <view opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yjl-ex-C71" userLabel="Control View">
                                 <rect key="frame" x="0.0" y="736" width="414" height="126"/>
                                 <subviews>
-                                    <scrollView opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hyR-Lm-v0c" userLabel="Property Scroll View">
+                                    <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" prefetchingEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CKk-vt-fuL">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
-                                        <subviews>
-                                            <view opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zHT-nV-MLI" userLabel="Property Content View">
-                                                <rect key="frame" x="165.5" y="0.0" width="414" height="63"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lOy-nD-2GF">
-                                                        <rect key="frame" x="0.0" y="2" width="414" height="59"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Px9-an-ysB">
-                                                                <rect key="frame" x="0.0" y="0.0" width="83" height="59"/>
-                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal">
-                                                                    <imageReference key="image" image="bolt.circle" catalog="system" renderingMode="hierarchical">
-                                                                        <hierarchicalColors>
-                                                                            <color systemColor="systemBlueColor"/>
-                                                                            <color systemColor="systemGrayColor"/>
-                                                                            <color systemColor="systemGrayColor"/>
-                                                                        </hierarchicalColors>
-                                                                    </imageReference>
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="52" weight="thin"/>
-                                                                </state>
-                                                                <connections>
-                                                                    <action selector="setCameraProperty:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="YA8-0Z-jj2"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" tag="1" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aL6-zp-eUp">
-                                                                <rect key="frame" x="83" y="0.0" width="82.5" height="59"/>
-                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal">
-                                                                    <imageReference key="image" image="viewfinder.circle" catalog="system" renderingMode="hierarchical">
-                                                                        <hierarchicalColors>
-                                                                            <color systemColor="systemBlueColor"/>
-                                                                            <color systemColor="systemGrayColor"/>
-                                                                            <color systemColor="systemGrayColor"/>
-                                                                        </hierarchicalColors>
-                                                                    </imageReference>
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="52" weight="thin"/>
-                                                                </state>
-                                                                <connections>
-                                                                    <action selector="setCameraProperty:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="MC6-pe-WkD"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" tag="2" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2PL-7G-Xw5">
-                                                                <rect key="frame" x="165.5" y="0.0" width="83" height="59"/>
-                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal">
-                                                                    <imageReference key="image" image="timer" catalog="system" renderingMode="hierarchical">
-                                                                        <hierarchicalColors>
-                                                                            <color systemColor="systemBlueColor"/>
-                                                                            <color systemColor="systemGrayColor"/>
-                                                                            <color systemColor="systemGrayColor"/>
-                                                                        </hierarchicalColors>
-                                                                    </imageReference>
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="52" weight="thin"/>
-                                                                </state>
-                                                                <connections>
-                                                                    <action selector="setCameraProperty:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="0gs-ub-xEp"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" tag="3" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gFc-Td-y4a">
-                                                                <rect key="frame" x="248.5" y="0.0" width="83" height="59"/>
-                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal">
-                                                                    <imageReference key="image" image="camera.aperture" catalog="system" renderingMode="hierarchical">
-                                                                        <hierarchicalColors>
-                                                                            <color systemColor="systemBlueColor"/>
-                                                                            <color systemColor="systemGrayColor"/>
-                                                                            <color systemColor="systemGrayColor"/>
-                                                                        </hierarchicalColors>
-                                                                    </imageReference>
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="52" weight="thin"/>
-                                                                </state>
-                                                                <connections>
-                                                                    <action selector="setCameraProperty:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="FZa-1h-ffw"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" tag="4" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LIa-FY-5Ap">
-                                                                <rect key="frame" x="331.5" y="0.0" width="82.5" height="59"/>
-                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                <state key="normal">
-                                                                    <imageReference key="image" image="magnifyingglass.circle" catalog="system" renderingMode="hierarchical">
-                                                                        <hierarchicalColors>
-                                                                            <color systemColor="systemBlueColor"/>
-                                                                            <color systemColor="systemGrayColor"/>
-                                                                            <color systemColor="systemGrayColor"/>
-                                                                        </hierarchicalColors>
-                                                                    </imageReference>
-                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="52" weight="thin"/>
-                                                                </state>
-                                                                <connections>
-                                                                    <action selector="setCameraProperty:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="Tkj-fH-wb9"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
-                                                    </stackView>
-                                                </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstItem="lOy-nD-2GF" firstAttribute="centerY" secondItem="zHT-nV-MLI" secondAttribute="centerY" id="GrX-jA-asR"/>
-                                                    <constraint firstItem="lOy-nD-2GF" firstAttribute="trailing" secondItem="zHT-nV-MLI" secondAttribute="trailing" id="VOa-5d-8la"/>
-                                                    <constraint firstItem="lOy-nD-2GF" firstAttribute="leading" secondItem="zHT-nV-MLI" secondAttribute="leading" id="y7y-jV-uum"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstItem="zHT-nV-MLI" firstAttribute="bottom" secondItem="hyR-Lm-v0c" secondAttribute="bottom" id="8DC-bS-THb"/>
-                                            <constraint firstItem="1XU-OF-2W6" firstAttribute="height" secondItem="zHT-nV-MLI" secondAttribute="height" id="FEN-Ty-KUV"/>
-                                            <constraint firstItem="6xr-nu-Xjx" firstAttribute="height" secondItem="zHT-nV-MLI" secondAttribute="height" id="GF9-MM-WlH"/>
-                                            <constraint firstItem="zHT-nV-MLI" firstAttribute="width" secondItem="hyR-Lm-v0c" secondAttribute="width" id="R70-ma-r5N"/>
-                                            <constraint firstItem="1XU-OF-2W6" firstAttribute="width" secondItem="zHT-nV-MLI" secondAttribute="width" multiplier="1.8375" id="al5-WU-fRd"/>
-                                            <constraint firstItem="zHT-nV-MLI" firstAttribute="leading" secondItem="hyR-Lm-v0c" secondAttribute="centerX" multiplier="0.8" id="anp-KD-2ht"/>
-                                            <constraint firstItem="6xr-nu-Xjx" firstAttribute="width" secondItem="zHT-nV-MLI" secondAttribute="width" id="bw3-Ny-HdV"/>
-                                            <constraint firstItem="zHT-nV-MLI" firstAttribute="height" secondItem="hyR-Lm-v0c" secondAttribute="height" id="hFf-EI-FVP"/>
-                                            <constraint firstItem="zHT-nV-MLI" firstAttribute="top" secondItem="hyR-Lm-v0c" secondAttribute="top" id="uiU-EB-Ltx"/>
-                                            <constraint firstItem="zHT-nV-MLI" firstAttribute="centerY" secondItem="hyR-Lm-v0c" secondAttribute="centerY" id="xh0-y4-SAw"/>
-                                        </constraints>
-                                        <viewLayoutGuide key="contentLayoutGuide" id="1XU-OF-2W6"/>
-                                        <viewLayoutGuide key="frameLayoutGuide" id="6xr-nu-Xjx"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="xXL-rC-IWR" customClass="CoverLayout">
+                                            <size key="itemSize" width="128" height="128"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionViewCellReuseID" id="yNv-Yw-ipb">
+                                                <rect key="frame" x="0.0" y="-32.5" width="128" height="128"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="74r-2A-rY4">
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ta3-vl-tBP">
+                                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="tintColor" systemColor="systemBlueColor"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="normal">
+                                                                <imageReference key="image" image="questionmark.circle" catalog="system" renderingMode="hierarchical">
+                                                                    <hierarchicalColors>
+                                                                        <color systemColor="systemYellowColor"/>
+                                                                        <color systemColor="systemBlueColor"/>
+                                                                        <color systemColor="tertiaryLabelColor"/>
+                                                                    </hierarchicalColors>
+                                                                </imageReference>
+                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42" weight="thin"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="configureCaptureDeviceProperty:forEvent:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="1iL-S5-LKR"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstItem="ta3-vl-tBP" firstAttribute="top" secondItem="74r-2A-rY4" secondAttribute="top" id="SBY-nc-4Qb"/>
+                                                        <constraint firstItem="ta3-vl-tBP" firstAttribute="trailing" secondItem="74r-2A-rY4" secondAttribute="trailing" id="V5A-UB-lYf"/>
+                                                        <constraint firstItem="ta3-vl-tBP" firstAttribute="bottom" secondItem="74r-2A-rY4" secondAttribute="bottom" id="WNb-0s-Lxf"/>
+                                                        <constraint firstItem="ta3-vl-tBP" firstAttribute="leading" secondItem="74r-2A-rY4" secondAttribute="leading" id="ck8-Mg-SoC"/>
+                                                    </constraints>
+                                                </collectionViewCellContentView>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </collectionViewCell>
+                                        </cells>
                                         <connections>
-                                            <outlet property="delegate" destination="Vkk-zE-HFM" id="MgK-QI-pJz"/>
+                                            <outlet property="dataSource" destination="Vkk-zE-HFM" id="8Jb-dz-Eh5"/>
+                                            <outlet property="delegate" destination="Vkk-zE-HFM" id="FZ6-rs-TDZ"/>
                                         </connections>
-                                    </scrollView>
-                                    <scrollView opaque="NO" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l4j-o2-yms" userLabel="Value Scroll View">
+                                    </collectionView>
+                                    <scrollView opaque="NO" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" directionalLockEnabled="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l4j-o2-yms" userLabel="Value Scroll View">
                                         <rect key="frame" x="0.0" y="63" width="414" height="63"/>
                                         <subviews>
-                                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AUn-31-wbz" userLabel="Value Content View" customClass="ScrollViewContentView">
+                                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AUn-31-wbz" userLabel="Scroll View Content View" customClass="ValueScrollViewContentView">
                                                 <rect key="frame" x="207" y="0.0" width="414" height="63"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </view>
@@ -180,8 +102,8 @@
                                             <constraint firstItem="AUn-31-wbz" firstAttribute="leading" secondItem="l4j-o2-yms" secondAttribute="centerX" id="lq9-tu-aEs"/>
                                             <constraint firstItem="AUn-31-wbz" firstAttribute="top" secondItem="l4j-o2-yms" secondAttribute="top" id="n63-aZ-IxX"/>
                                         </constraints>
-                                        <viewLayoutGuide key="contentLayoutGuide" id="pXw-cT-f7z"/>
-                                        <viewLayoutGuide key="frameLayoutGuide" id="jkk-Ja-NXN"/>
+                                        <viewLayoutGuide key="contentLayoutGuide" id="pXw-cT-f7z" userLabel="Scroll View Content Layout Guide"/>
+                                        <viewLayoutGuide key="frameLayoutGuide" id="jkk-Ja-NXN" userLabel="Scroll View Frame Layout Guide"/>
                                         <connections>
                                             <outlet property="delegate" destination="Vkk-zE-HFM" id="Gpk-Bu-dKk"/>
                                         </connections>
@@ -189,15 +111,25 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="hyR-Lm-v0c" firstAttribute="centerX" secondItem="Yjl-ex-C71" secondAttribute="centerX" id="Dpb-4p-uJL"/>
-                                    <constraint firstItem="hyR-Lm-v0c" firstAttribute="bottom" secondItem="Yjl-ex-C71" secondAttribute="centerY" id="PP3-VM-7F3"/>
+                                    <constraint firstItem="CKk-vt-fuL" firstAttribute="width" secondItem="Yjl-ex-C71" secondAttribute="width" id="7IL-a1-UkI"/>
+                                    <constraint firstItem="CKk-vt-fuL" firstAttribute="bottom" secondItem="Yjl-ex-C71" secondAttribute="centerY" id="Hbi-E5-WXv"/>
                                     <constraint firstItem="l4j-o2-yms" firstAttribute="centerX" secondItem="Yjl-ex-C71" secondAttribute="centerX" id="RJK-oc-3a2"/>
+                                    <constraint firstItem="CKk-vt-fuL" firstAttribute="top" secondItem="Yjl-ex-C71" secondAttribute="top" id="WZM-ho-ZTU"/>
                                     <constraint firstItem="l4j-o2-yms" firstAttribute="top" secondItem="Yjl-ex-C71" secondAttribute="centerY" id="ZsZ-Sj-NkU"/>
-                                    <constraint firstItem="hyR-Lm-v0c" firstAttribute="width" secondItem="Yjl-ex-C71" secondAttribute="width" id="c7I-UR-xzE"/>
                                     <constraint firstItem="l4j-o2-yms" firstAttribute="bottom" secondItem="Yjl-ex-C71" secondAttribute="bottom" id="eLz-1O-AAK"/>
-                                    <constraint firstItem="hyR-Lm-v0c" firstAttribute="top" secondItem="Yjl-ex-C71" secondAttribute="top" id="eam-tw-LUM"/>
+                                    <constraint firstItem="CKk-vt-fuL" firstAttribute="leading" secondItem="Yjl-ex-C71" secondAttribute="leading" id="kgw-ub-yhc"/>
+                                    <constraint firstItem="CKk-vt-fuL" firstAttribute="centerX" secondItem="Yjl-ex-C71" secondAttribute="centerX" id="l8P-um-z75"/>
+                                    <constraint firstItem="CKk-vt-fuL" firstAttribute="height" secondItem="Yjl-ex-C71" secondAttribute="height" multiplier="0.5" id="oy1-U9-dqq"/>
                                     <constraint firstItem="l4j-o2-yms" firstAttribute="width" secondItem="Yjl-ex-C71" secondAttribute="width" id="wYc-9i-nWz"/>
+                                    <constraint firstItem="CKk-vt-fuL" firstAttribute="trailing" secondItem="Yjl-ex-C71" secondAttribute="trailing" id="x1P-lX-eEQ"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Hbi-E5-WXv"/>
+                                        <exclude reference="kgw-ub-yhc"/>
+                                        <exclude reference="x1P-lX-eEQ"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="D3y-I2-s2f"/>
@@ -213,22 +145,11 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="ISOButton" destination="gFc-Td-y4a" id="W47-sQ-BPW"/>
                         <outlet property="captureVideoPreview" destination="0kB-bU-dhr" id="5oW-qV-ysx"/>
-                        <outlet property="exposureDurationButton" destination="2PL-7G-Xw5" id="det-Ld-L1D"/>
-                        <outlet property="lensPositionButton" destination="aL6-zp-eUp" id="no1-R9-buw"/>
-                        <outlet property="propertyButtonsStackView" destination="lOy-nD-2GF" id="fqe-Ab-sqg"/>
-                        <outlet property="propertyContentView" destination="zHT-nV-MLI" id="9mS-hL-131"/>
-                        <outlet property="propertyScrollView" destination="hyR-Lm-v0c" id="ivK-e6-Cle"/>
-                        <outlet property="torchLevelButton" destination="Px9-an-ysB" id="Zf6-eJ-E0r"/>
-                        <outlet property="valueContentView" destination="AUn-31-wbz" id="t2c-he-Bk8"/>
+                        <outlet property="cellLayout" destination="xXL-rC-IWR" id="J1R-Pl-L89"/>
+                        <outlet property="collectionView" destination="CKk-vt-fuL" id="0s9-2J-x5t"/>
+                        <outlet property="valueContentView" destination="AUn-31-wbz" id="9d3-Tn-v1s"/>
                         <outlet property="valueScrollView" destination="l4j-o2-yms" id="CzL-za-8gb"/>
-                        <outlet property="zoomFactorButton" destination="LIa-FY-5Ap" id="FsS-Uy-uh1"/>
-                        <outletCollection property="cameraControlButtons" destination="Px9-an-ysB" id="w5M-OH-2Tl"/>
-                        <outletCollection property="cameraControlButtons" destination="aL6-zp-eUp" id="2zt-cU-UKX"/>
-                        <outletCollection property="cameraControlButtons" destination="2PL-7G-Xw5" id="2OQ-mK-52b"/>
-                        <outletCollection property="cameraControlButtons" destination="gFc-Td-y4a" id="JVn-DB-Ohy"/>
-                        <outletCollection property="cameraControlButtons" destination="LIa-FY-5Ap" id="X67-j0-K7g"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WEk-wX-jiD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -237,16 +158,15 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bolt.circle" catalog="system" width="128" height="121"/>
-        <image name="camera.aperture" catalog="system" width="128" height="121"/>
-        <image name="magnifyingglass.circle" catalog="system" width="128" height="121"/>
-        <image name="timer" catalog="system" width="128" height="121"/>
-        <image name="viewfinder.circle" catalog="system" width="128" height="121"/>
+        <image name="questionmark.circle" catalog="system" width="128" height="121"/>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
-        <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tertiaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

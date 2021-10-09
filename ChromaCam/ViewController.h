@@ -8,22 +8,17 @@
 #import <UIKit/UIKit.h>
 
 #import "UIView+AVCaptureVideoPreviewLayer.h"
-#import "ScrollViewContentView.h"
+#import "ValueScrollViewContentView.h"
+#import "CoverLayout.h"
 
-@interface ViewController : UIViewController <UIScrollViewDelegate>
+@interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDataSourcePrefetching>
 
-@property (weak, nonatomic) IBOutlet UIScrollView *propertyScrollView;
 @property (weak, nonatomic) IBOutlet UIView * captureVideoPreview;
-@property (weak, nonatomic) IBOutlet UIStackView *propertyButtonsStackView;
-@property (weak, nonatomic) IBOutlet UIView *propertyContentView;
-@property (weak, nonatomic) IBOutlet UIButton *torchLevelButton;
-@property (weak, nonatomic) IBOutlet UIButton *lensPositionButton;
-@property (weak, nonatomic) IBOutlet UIButton *exposureDurationButton;
-@property (weak, nonatomic) IBOutlet UIButton *ISOButton;
-@property (weak, nonatomic) IBOutlet UIButton *zoomFactorButton;
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cameraControlButtons;
+
 @property (weak, nonatomic) IBOutlet UIScrollView *valueScrollView;
-@property (weak, nonatomic) IBOutlet ScrollViewContentView *valueContentView;
+@property (weak, nonatomic) IBOutlet ValueScrollViewContentView *valueContentView;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet CoverLayout *cellLayout;
 
 @end
 

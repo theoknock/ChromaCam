@@ -6,13 +6,13 @@
 //  Copyright © 2019 The Life of a Demoniac. All rights reserved.
 //
 
-#import "ScaleSliderOverlayLayer.h"
+#import "ValueScrollViewContentViewLayerContent.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <CoreText/CoreText.h>
 
 
-@implementation ScaleSliderOverlayLayer
+@implementation ValueScrollViewContentViewLayerContent
 {
     CATextLayer *scaleSliderValueTextLayer;
     CATextLayer *scaleSliderMinimumValueTextLayer;
