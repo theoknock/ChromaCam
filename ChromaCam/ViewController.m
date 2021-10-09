@@ -8,6 +8,7 @@
 #import "ViewController.h"
 #import "CaptureSessionConfigurationQueue.h"
 #import "CoverLayout.h"
+#import "ValueScrollViewContentViewLayerContent.h"
 
 static float normalize(float value, float min, float max) {
     return (value - min) / (max - min);
@@ -122,7 +123,7 @@ typedef enum : NSUInteger {
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    return CGSizeMake(collectionView.bounds.size.width/3, collectionView.bounds.size.height);
+    return CGSizeMake(collectionView.bounds.size.width / 5, collectionView.bounds.size.height);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
@@ -170,26 +171,15 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
 
 - (__kindof PropertyCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PropertyCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CollectionViewCellReuseID" forIndexPath:indexPath];
-    UIImage * button_image = [UIImage systemImageNamed:ImageForCaptureDeviceConfigurationControlProperty(indexPath.item)];
-    UIButton * cell_button = ButtonForCaptureDeviceConfigurationControlProperty(indexPath.item);
-    [cell.contentView addSubview:cell_button];
-    //    UIButton * property_control_button = (UIButton *)cell.contentView.subviews.firstObject;
-    //    [property_control_button setAutomaticallyUpdatesConfiguration:TRUE];
-    //    [property_control_button setTag:indexPath.item];
-    //    [property_control_button setImage:button_image forState:UIControlStateNormal];
-    //
-    //    The highlighted property displays correctly here; but, not anywhere else
-    //    [property_control_button setHighlighted:TRUE];
-    //    [property_control_button setSelected:TRUE];
-    
-//    [cell setCaptureDeviceConfigurationPropertyButton:cell_button];
+    [cell setCaptureDeviceConfigurationPropertyButton:ButtonForCaptureDeviceConfigurationControlProperty(indexPath.item)];
     
     return cell;
 }
 
-//- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-//    [(UIButton *)[[[[collectionView cellForItemAtIndexPath:indexPath] contentView] subviews] firstObject] setHighlighted:TRUE];
-//}
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%@", ([ButtonForCaptureDeviceConfigurationControlProperty(indexPath.item) isHighlighted] && [ButtonForCaptureDeviceConfigurationControlProperty(indexPath.item) isSelected]) ? @"ActiveState" : @"InactiveState");
+    [(PropertyCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath] setCaptureDeviceConfigurationPropertyButtonActiveState:TRUE];
+}
 
 - (IBAction)configureCaptureDeviceProperty:(UIButton *)sender forEvent:(UIEvent *)event {
     CaptureDeviceConfigurationControlProperty sender_control_property = (CaptureDeviceConfigurationControlProperty)sender.tag;
@@ -197,17 +187,21 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
     
     [UIView animateWithDuration:0.25 animations:^{
         [self.valueScrollView setAlpha:0.0];
-        for (NSIndexPath * indexPath in [self.collectionView indexPathsForSelectedItems]) {
-            [self.collectionView deselectItemAtIndexPath:indexPath animated:TRUE];
-            NSLog(@"%lu", indexPath.item);
-        }
         
-        NSIndexPath * selectedIndexPath = [NSIndexPath indexPathForItem:sender_control_property inSection:0];
-        [self.collectionView selectItemAtIndexPath:selectedIndexPath animated:TRUE scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
-
-        [ButtonForCaptureDeviceConfigurationControlProperty(sender_control_property) setSelected:TRUE];
-        [ButtonForCaptureDeviceConfigurationControlProperty(sender_control_property) setHighlighted:TRUE];
-    
+//        for (CaptureDeviceConfigurationControlProperty control_property = CaptureDeviceConfigurationControlPropertyTorchLevel; control_property <= CaptureDeviceConfigurationControlPropertyZoomFactor; control_property++) {
+//            BOOL changeState = (sender_control_property == control_property);
+//            [ButtonForCaptureDeviceConfigurationControlProperty(control_property) setSelected:changeState];
+//            [ButtonForCaptureDeviceConfigurationControlProperty(control_property) setHighlighted:changeState];
+//        }
+        
+        [ButtonForCaptureDeviceConfigurationControlProperty(CaptureDeviceConfigurationControlPropertyTorchLevel) setSelected:TRUE];
+        [ButtonForCaptureDeviceConfigurationControlProperty(CaptureDeviceConfigurationControlPropertyTorchLevel) setHighlighted:TRUE];
+        
+//        NSIndexPath * selectedIndexPath = [NSIndexPath indexPathForItem:CaptureDeviceConfigurationControlPropertyTorchLevel inSection:0];
+//        [(PropertyCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:selectedIndexPath] setCaptureDeviceConfigurationPropertyButtonActiveState:FALSE];
+        
+        
+        
     } completion:^(BOOL finished) {
         [captureDevice unlockForConfiguration];
         
@@ -224,6 +218,8 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
                             [cd setTorchModeOnWithLevel:new_value error:nil];
                         else
                             [cd setTorchMode:AVCaptureTorchModeOff];
+                        
+                        [(ValueScrollViewContentViewLayerContent *)self.valueContentView.layer setValue:normalize(new_value, old_min, old_max)];
                     };
                 }(self.valueScrollView, captureDevice, [captureDevice torchLevel], 0.0, 1.0);
                 break;
@@ -236,6 +232,7 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
                     return ^ void (float offset) {
                         float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(valueScrollView.bounds), old_min, old_max), old_max));
                         [cd setFocusModeLockedWithLensPosition:new_value completionHandler:nil];
+                        [(ValueScrollViewContentViewLayerContent *)self.valueContentView.layer setValue:normalize(new_value, old_min, old_max)];
                     };
                 }(self.valueScrollView, captureDevice, captureDevice.lensPosition, 0.0, 1.0);
                 break;
@@ -251,6 +248,8 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
                         float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(valueScrollView.bounds), old_min, old_max), old_max));
                         CMTime exposureDurationValue = CMTimeMakeWithSeconds(new_value, 1000*1000*1000);
                         [cd setExposureModeCustomWithDuration:exposureDurationValue ISO:AVCaptureISOCurrent completionHandler:nil];
+                        
+                        [(ValueScrollViewContentViewLayerContent *)self.valueContentView.layer setValue:normalize(new_value, old_min, old_max)];
                     };
                 }(self.valueScrollView, captureDevice, CMTimeGetSeconds([captureDevice exposureDuration]), CMTimeGetSeconds(captureDevice.activeFormat.minExposureDuration), 1.0/3.0);
                 break;
@@ -265,6 +264,8 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
                     return ^ void (float offset) {
                         float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(valueScrollView.bounds), old_min, old_max), old_max));
                         [cd setExposureModeCustomWithDuration:captureDevice.exposureDuration ISO:new_value completionHandler:nil];
+                        
+                        [(ValueScrollViewContentViewLayerContent *)self.valueContentView.layer setValue:normalize(new_value, old_min, old_max)];
                     };
                 }(self.valueScrollView, captureDevice, captureDevice.ISO, captureDevice.activeFormat.minISO, captureDevice.activeFormat.maxISO);
                 break;
@@ -279,6 +280,8 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
                     return ^ void (float offset) {
                         float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(valueScrollView.bounds), old_min, old_max), old_max));
                         [cd setVideoZoomFactor:new_value];
+                        
+                        [(ValueScrollViewContentViewLayerContent *)self.valueContentView.layer setValue:normalize(new_value, old_min, old_max)];
                     };
                 }(self.valueScrollView, captureDevice, captureDevice.videoZoomFactor, captureDevice.minAvailableVideoZoomFactor, captureDevice.maxAvailableVideoZoomFactor);
                 break;

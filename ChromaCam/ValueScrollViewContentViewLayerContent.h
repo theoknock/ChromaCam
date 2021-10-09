@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ValueScrollViewContentViewLayerContent : CALayer
 
+- (void)setValue:(CGFloat)value;
+
 @end
 
 NS_ASSUME_NONNULL_END

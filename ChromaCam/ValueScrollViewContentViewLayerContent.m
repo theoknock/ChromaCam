@@ -44,6 +44,13 @@
     return self;
 }
 
+- (void)setValue:(CGFloat)value {
+    [self setText:[[NSNumber numberWithFloat:value] stringValue] forLayer:scaleSliderValueTextLayer frameWithOffset:(CGRectGetMaxX([[UIScreen mainScreen] bounds]) -  CGRectGetMinX([[UIScreen mainScreen] bounds])) * value];
+    
+    [self setNeedsDisplay];
+    [self setNeedsDisplayOnBoundsChange:YES];
+}
+
 - (void)setText:(NSString *)valueString forLayer:(CATextLayer *)textLayer frameWithOffset:(CGFloat)originX {
     [textLayer setContentsScale:[[UIScreen mainScreen] nativeScale]];
     [textLayer setRasterizationScale:[[UIScreen mainScreen] nativeScale]];

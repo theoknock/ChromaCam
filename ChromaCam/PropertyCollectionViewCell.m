@@ -8,13 +8,24 @@
 #import "PropertyCollectionViewCell.h"
 
 @implementation PropertyCollectionViewCell
-{
-    UIButton * captureDeviceConfigurationPropertyButton;
+
+@synthesize captureDeviceConfigurationPropertyButton;
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    [captureDeviceConfigurationPropertyButton removeFromSuperview];
+    captureDeviceConfigurationPropertyButton = nil;
 }
 
-- (void)setCaptureDeviceConfigurationPropertyButton:(UIButton *)button
-{
-    captureDeviceConfigurationPropertyButton = button;
+- (void)setCaptureDeviceConfigurationPropertyButton:(UIButton *)captureDeviceConfigurationPropertyButton {
+    self->captureDeviceConfigurationPropertyButton = captureDeviceConfigurationPropertyButton;
+    [self.contentView addSubview:self->captureDeviceConfigurationPropertyButton];
+}
+
+- (void)setCaptureDeviceConfigurationPropertyButtonActiveState:(BOOL)activeState {
+    [captureDeviceConfigurationPropertyButton setHighlighted:activeState];
+    [captureDeviceConfigurationPropertyButton setSelected:activeState];
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 @end

@@ -11,7 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PropertyCollectionViewCell : UICollectionViewCell
 
-- (void)setCaptureDeviceConfigurationPropertyButton:(UIButton *)button;
+@property (nonatomic) UIButton * captureDeviceConfigurationPropertyButton;
+//- (void)setCaptureDeviceConfigurationPropertyButton:(UIButton * _Nonnull * _Nonnull)button;
+- (void)setCaptureDeviceConfigurationPropertyButtonActiveState:(BOOL)activeState;
 
 @end
 
