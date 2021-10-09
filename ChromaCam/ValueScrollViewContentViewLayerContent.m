@@ -45,7 +45,7 @@
 }
 
 - (void)setValue:(CGFloat)value {
-    [self setText:[[NSNumber numberWithFloat:value] stringValue] forLayer:scaleSliderValueTextLayer frameWithOffset:(CGRectGetMaxX([[UIScreen mainScreen] bounds]) -  CGRectGetMinX([[UIScreen mainScreen] bounds])) * value];
+    [self setText:[NSString stringWithFormat:@"%.2f", value] forLayer:scaleSliderValueTextLayer frameWithOffset:(CGRectGetMaxX([[UIScreen mainScreen] bounds]) -  CGRectGetMinX([[UIScreen mainScreen] bounds])) * value];
     
     [self setNeedsDisplay];
     [self setNeedsDisplayOnBoundsChange:YES];
