@@ -38,40 +38,13 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionViewCellReuseID" id="yNv-Yw-ipb">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionViewCellReuseID" id="yNv-Yw-ipb" customClass="PropertyCollectionViewCell">
                                                 <rect key="frame" x="0.0" y="-32.5" width="128" height="128"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="74r-2A-rY4">
                                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ta3-vl-tBP">
-                                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <color key="tintColor" systemColor="systemBlueColor"/>
-                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                            <state key="normal">
-                                                                <imageReference key="image" image="questionmark.circle" catalog="system" renderingMode="hierarchical">
-                                                                    <hierarchicalColors>
-                                                                        <color systemColor="systemYellowColor"/>
-                                                                        <color systemColor="systemBlueColor"/>
-                                                                        <color systemColor="tertiaryLabelColor"/>
-                                                                    </hierarchicalColors>
-                                                                </imageReference>
-                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42" weight="thin"/>
-                                                            </state>
-                                                            <connections>
-                                                                <action selector="configureCaptureDeviceProperty:forEvent:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="1iL-S5-LKR"/>
-                                                            </connections>
-                                                        </button>
-                                                    </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstItem="ta3-vl-tBP" firstAttribute="top" secondItem="74r-2A-rY4" secondAttribute="top" id="SBY-nc-4Qb"/>
-                                                        <constraint firstItem="ta3-vl-tBP" firstAttribute="trailing" secondItem="74r-2A-rY4" secondAttribute="trailing" id="V5A-UB-lYf"/>
-                                                        <constraint firstItem="ta3-vl-tBP" firstAttribute="bottom" secondItem="74r-2A-rY4" secondAttribute="bottom" id="WNb-0s-Lxf"/>
-                                                        <constraint firstItem="ta3-vl-tBP" firstAttribute="leading" secondItem="74r-2A-rY4" secondAttribute="leading" id="ck8-Mg-SoC"/>
-                                                    </constraints>
                                                 </collectionViewCellContentView>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </collectionViewCell>
@@ -145,20 +118,134 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="ISOButton" destination="3gZ-pc-v98" id="YfX-A9-4sO"/>
                         <outlet property="captureVideoPreview" destination="0kB-bU-dhr" id="5oW-qV-ysx"/>
                         <outlet property="cellLayout" destination="xXL-rC-IWR" id="J1R-Pl-L89"/>
                         <outlet property="collectionView" destination="CKk-vt-fuL" id="0s9-2J-x5t"/>
+                        <outlet property="exposureDurationButton" destination="BK5-66-DHN" id="XVf-Xk-O9j"/>
+                        <outlet property="lensPositionButton" destination="Q0d-rR-pNV" id="JFh-j0-kg6"/>
+                        <outlet property="torchLevelButton" destination="ta3-vl-tBP" id="CHT-5W-wKq"/>
                         <outlet property="valueContentView" destination="AUn-31-wbz" id="9d3-Tn-v1s"/>
                         <outlet property="valueScrollView" destination="l4j-o2-yms" id="CzL-za-8gb"/>
+                        <outlet property="zoomFactorButton" destination="kHT-IJ-P4B" id="p3I-lI-UyC"/>
+                        <outletCollection property="CaptureDevicePropertyConfigurationButtons" destination="ta3-vl-tBP" id="WfY-mm-FQl"/>
+                        <outletCollection property="CaptureDevicePropertyConfigurationButtons" destination="Q0d-rR-pNV" id="blK-MX-D5s"/>
+                        <outletCollection property="CaptureDevicePropertyConfigurationButtons" destination="BK5-66-DHN" id="SNO-p8-Txm"/>
+                        <outletCollection property="CaptureDevicePropertyConfigurationButtons" destination="3gZ-pc-v98" id="tOT-Pe-cz1"/>
+                        <outletCollection property="CaptureDevicePropertyConfigurationButtons" destination="kHT-IJ-P4B" id="4dZ-AM-bQ4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WEk-wX-jiD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="ta3-vl-tBP" userLabel="Torch Level Button">
+                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="tintColor" systemColor="systemBlueColor"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal">
+                        <imageReference key="image" image="bolt.circle" catalog="system" renderingMode="hierarchical">
+                            <hierarchicalColors>
+                                <color systemColor="systemYellowColor"/>
+                                <color systemColor="systemBlueColor"/>
+                                <color systemColor="tertiaryLabelColor"/>
+                            </hierarchicalColors>
+                        </imageReference>
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42" weight="thin"/>
+                    </state>
+                    <connections>
+                        <action selector="configureCaptureDeviceProperty:forEvent:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="1iL-S5-LKR"/>
+                    </connections>
+                </button>
+                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="Q0d-rR-pNV" userLabel="Lens Position Button">
+                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="tintColor" systemColor="systemBlueColor"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal">
+                        <imageReference key="image" image="viewfinder.circle" catalog="system" renderingMode="hierarchical">
+                            <hierarchicalColors>
+                                <color systemColor="systemYellowColor"/>
+                                <color systemColor="systemBlueColor"/>
+                                <color systemColor="tertiaryLabelColor"/>
+                            </hierarchicalColors>
+                        </imageReference>
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42" weight="thin"/>
+                    </state>
+                    <connections>
+                        <action selector="configureCaptureDeviceProperty:forEvent:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="fYu-3s-i9I"/>
+                    </connections>
+                </button>
+                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="BK5-66-DHN" userLabel="Exposure Duration Button">
+                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="tintColor" systemColor="systemBlueColor"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal">
+                        <imageReference key="image" image="timer" catalog="system" renderingMode="hierarchical">
+                            <hierarchicalColors>
+                                <color systemColor="systemYellowColor"/>
+                                <color systemColor="systemBlueColor"/>
+                                <color systemColor="tertiaryLabelColor"/>
+                            </hierarchicalColors>
+                        </imageReference>
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42" weight="thin"/>
+                    </state>
+                    <connections>
+                        <action selector="configureCaptureDeviceProperty:forEvent:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="Fsz-Fb-2QT"/>
+                    </connections>
+                </button>
+                <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="3gZ-pc-v98" userLabel="ISO Button">
+                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="tintColor" systemColor="systemBlueColor"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal">
+                        <imageReference key="image" image="camera.aperture" catalog="system" renderingMode="hierarchical">
+                            <hierarchicalColors>
+                                <color systemColor="systemYellowColor"/>
+                                <color systemColor="systemBlueColor"/>
+                                <color systemColor="tertiaryLabelColor"/>
+                            </hierarchicalColors>
+                        </imageReference>
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42" weight="thin"/>
+                    </state>
+                    <connections>
+                        <action selector="configureCaptureDeviceProperty:forEvent:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="cRa-8Q-OOC"/>
+                    </connections>
+                </button>
+                <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="kHT-IJ-P4B" userLabel="Zoom Factor Button">
+                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="tintColor" systemColor="systemBlueColor"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal">
+                        <imageReference key="image" image="magnifyingglass.circle" catalog="system" renderingMode="hierarchical">
+                            <hierarchicalColors>
+                                <color systemColor="systemYellowColor"/>
+                                <color systemColor="systemBlueColor"/>
+                                <color systemColor="tertiaryLabelColor"/>
+                            </hierarchicalColors>
+                        </imageReference>
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="42" weight="thin"/>
+                    </state>
+                    <connections>
+                        <action selector="configureCaptureDeviceProperty:forEvent:" destination="Vkk-zE-HFM" eventType="touchUpInside" id="UL2-3J-C9i"/>
+                    </connections>
+                </button>
             </objects>
             <point key="canvasLocation" x="139" y="138"/>
         </scene>
     </scenes>
     <resources>
-        <image name="questionmark.circle" catalog="system" width="128" height="121"/>
+        <image name="bolt.circle" catalog="system" width="128" height="121"/>
+        <image name="camera.aperture" catalog="system" width="128" height="121"/>
+        <image name="magnifyingglass.circle" catalog="system" width="128" height="121"/>
+        <image name="timer" catalog="system" width="128" height="121"/>
+        <image name="viewfinder.circle" catalog="system" width="128" height="121"/>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

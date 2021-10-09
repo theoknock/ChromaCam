@@ -21,6 +21,7 @@
 		B9E3F37B2710A5B5007B762A /* ValueScrollViewContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = B9E3F3772710A5B5007B762A /* ValueScrollViewContentView.m */; };
 		B9E3F37C2710A5B5007B762A /* ValueScrollViewContentView.h in Sources */ = {isa = PBXBuildFile; fileRef = B9E3F3782710A5B5007B762A /* ValueScrollViewContentView.h */; };
 		B9E74127271206670060056C /* CoverLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B9E74126271206670060056C /* CoverLayout.m */; };
+		B9E7412A271217DF0060056C /* PropertyCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B9E74129271217DF0060056C /* PropertyCollectionViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,8 @@
 		B9E3F3782710A5B5007B762A /* ValueScrollViewContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ValueScrollViewContentView.h; path = ChromaCam/ValueScrollViewContentView.h; sourceTree = "<group>"; };
 		B9E74125271206670060056C /* CoverLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverLayout.h; sourceTree = "<group>"; };
 		B9E74126271206670060056C /* CoverLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverLayout.m; sourceTree = "<group>"; };
+		B9E74128271217DF0060056C /* PropertyCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropertyCollectionViewCell.h; sourceTree = "<group>"; };
+		B9E74129271217DF0060056C /* PropertyCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PropertyCollectionViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,16 +91,18 @@
 				B9E2CF8526FFB2D7008D617E /* SceneDelegate.m */,
 				B9E2CF8726FFB2D7008D617E /* ViewController.h */,
 				B9E2CF8826FFB2D7008D617E /* ViewController.m */,
+				B9E74128271217DF0060056C /* PropertyCollectionViewCell.h */,
+				B9E74129271217DF0060056C /* PropertyCollectionViewCell.m */,
 				B9E74125271206670060056C /* CoverLayout.h */,
 				B9E74126271206670060056C /* CoverLayout.m */,
 				B9CE50492707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.h */,
 				B9CE504A2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m */,
 				B9CE504C2707D5E600FCD024 /* CaptureSessionConfigurationQueue.h */,
 				B9CE504D2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c */,
-				B9E2CF8A26FFB2D7008D617E /* Main.storyboard */,
 				B9E2CF8D26FFB2D9008D617E /* Assets.xcassets */,
 				B9E2CF9226FFB2D9008D617E /* Info.plist */,
 				B9E2CF9326FFB2D9008D617E /* main.m */,
+				B9E2CF8A26FFB2D7008D617E /* Main.storyboard */,
 				B9E2CF8F26FFB2D9008D617E /* LaunchScreen.storyboard */,
 			);
 			path = ChromaCam;
@@ -184,6 +189,7 @@
 				B9CE504B2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m in Sources */,
 				B9E2CF9426FFB2D9008D617E /* main.m in Sources */,
 				B9E2CF8626FFB2D7008D617E /* SceneDelegate.m in Sources */,
+				B9E7412A271217DF0060056C /* PropertyCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

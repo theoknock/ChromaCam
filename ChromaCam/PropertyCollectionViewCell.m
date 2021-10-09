@@ -6,34 +6,15 @@
 //
 
 #import "PropertyCollectionViewCell.h"
-#import "AFCollectionViewLayoutAttributes.h"
 
 @implementation PropertyCollectionViewCell
-
-#pragma mark - Overridden Methods
-
--(void)prepareForReuse
 {
-    [super prepareForReuse];
+    UIButton * captureDeviceConfigurationPropertyButton;
 }
 
--(void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes
+- (void)setCaptureDeviceConfigurationPropertyButton:(UIButton *)button
 {
-    [super applyLayoutAttributes:layoutAttributes];
-//    maskView.alpha = 0.0f;
-    self.layer.shouldRasterize = NO;
-    
-    // Important! Check to make sure we're actually this special subclass.
-    // Failing to do so could cause the app to crash!
-    if (![layoutAttributes isKindOfClass:[AFCollectionViewLayoutAttributes class]])
-    {
-        return;
-    }
-    
-    AFCollectionViewLayoutAttributes *castedLayoutAttributes = (AFCollectionViewLayoutAttributes *)layoutAttributes;
-    
-    self.layer.shouldRasterize = castedLayoutAttributes.shouldRasterize;
-//    maskView.alpha = castedLayoutAttributes.maskingValue;
+    captureDeviceConfigurationPropertyButton = button;
 }
 
 @end

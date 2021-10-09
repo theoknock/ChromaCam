@@ -65,6 +65,7 @@ typedef enum : NSUInteger {
     AVCaptureConnection  * captureConnection;
     
     void(^configureCameraProperty)(float);
+    UIButton * (^ButtonForCaptureDeviceConfigurationControlProperty)(CaptureDeviceConfigurationControlProperty);
 }
 
 @end
@@ -89,6 +90,14 @@ typedef enum : NSUInteger {
     [captureSession commitConfiguration];
     [captureSession startRunning];
     
+    [self.collectionView setAllowsSelection:TRUE];
+    [self.collectionView setAllowsMultipleSelection:FALSE];
+    
+    ButtonForCaptureDeviceConfigurationControlProperty = ^ (NSArray<UIButton *> * buttons) {
+        return ^ UIButton * (CaptureDeviceConfigurationControlProperty control_property) {
+            return [buttons objectAtIndex:control_property];
+        };
+    }(@[self.torchLevelButton, self.lensPositionButton, self.exposureDurationButton, self.ISOButton, self.zoomFactorButton]);
 }
 
 
@@ -102,9 +111,9 @@ typedef enum : NSUInteger {
     return 5;
 }
 
-//- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+//- (PropertyCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
 //
-//    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cellID" forIndexPath:indexPath];
+//    PropertyCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cellID" forIndexPath:indexPath];
 //
 //
 //    return cell;
@@ -159,21 +168,46 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
     }
 };
 
-- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CollectionViewCellReuseID" forIndexPath:indexPath];
-    UIButton * property_control_button = (UIButton *)cell.contentView.subviews.firstObject;
-    [property_control_button setTag:indexPath.item];
-    UIImage * button_image = [UIImage systemImageNamed:ImageForCaptureDeviceConfigurationControlProperty(property_control_button.tag)];
-    [property_control_button setImage:button_image forState:UIControlStateNormal];
+- (__kindof PropertyCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    PropertyCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CollectionViewCellReuseID" forIndexPath:indexPath];
+    UIImage * button_image = [UIImage systemImageNamed:ImageForCaptureDeviceConfigurationControlProperty(indexPath.item)];
+    UIButton * cell_button = ButtonForCaptureDeviceConfigurationControlProperty(indexPath.item);
+    [cell.contentView addSubview:cell_button];
+    //    UIButton * property_control_button = (UIButton *)cell.contentView.subviews.firstObject;
+    //    [property_control_button setAutomaticallyUpdatesConfiguration:TRUE];
+    //    [property_control_button setTag:indexPath.item];
+    //    [property_control_button setImage:button_image forState:UIControlStateNormal];
+    //
+    //    The highlighted property displays correctly here; but, not anywhere else
+    //    [property_control_button setHighlighted:TRUE];
+    //    [property_control_button setSelected:TRUE];
+    
+//    [cell setCaptureDeviceConfigurationPropertyButton:cell_button];
     
     return cell;
 }
 
+//- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+//    [(UIButton *)[[[[collectionView cellForItemAtIndexPath:indexPath] contentView] subviews] firstObject] setHighlighted:TRUE];
+//}
+
 - (IBAction)configureCaptureDeviceProperty:(UIButton *)sender forEvent:(UIEvent *)event {
     CaptureDeviceConfigurationControlProperty sender_control_property = (CaptureDeviceConfigurationControlProperty)sender.tag;
     
+    
     [UIView animateWithDuration:0.25 animations:^{
         [self.valueScrollView setAlpha:0.0];
+        for (NSIndexPath * indexPath in [self.collectionView indexPathsForSelectedItems]) {
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:TRUE];
+            NSLog(@"%lu", indexPath.item);
+        }
+        
+        NSIndexPath * selectedIndexPath = [NSIndexPath indexPathForItem:sender_control_property inSection:0];
+        [self.collectionView selectItemAtIndexPath:selectedIndexPath animated:TRUE scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
+
+        [ButtonForCaptureDeviceConfigurationControlProperty(sender_control_property) setSelected:TRUE];
+        [ButtonForCaptureDeviceConfigurationControlProperty(sender_control_property) setHighlighted:TRUE];
+    
     } completion:^(BOOL finished) {
         [captureDevice unlockForConfiguration];
         
