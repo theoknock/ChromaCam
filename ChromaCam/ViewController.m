@@ -7,56 +7,12 @@
 
 #import "ViewController.h"
 #import "CaptureSessionConfigurationQueue.h"
+//#import "CoverFlowStyleLayout.h"
+#import "CaptureDeviceConfigurationPropertyResources.h"
 #import "CoverLayout.h"
 #import "ValueScrollViewContentViewLayerContent.h"
 
-static float normalize(float value, float min, float max) {
-    return (value - min) / (max - min);
-}
-
-static float scale(float old_value, float old_min, float old_max, float new_min, float new_max) {
-    return (new_max - new_min) * (fmax(old_min, fmin(old_value, old_max)) - old_min) / (old_max - old_min) + new_min;
-}
-
-typedef enum : NSUInteger {
-    CaptureDeviceConfigurationControlTypeProperty,
-    CaptureDeviceConfigurationControlTypeValue,
-    CaptureDeviceConfigurationControlTypeControlImage
-} CaptureDeviceConfigurationControlType;
-
-typedef enum : NSUInteger {
-    CaptureDeviceConfigurationControlPropertyTorchLevel,
-    CaptureDeviceConfigurationControlPropertyLensPosition,
-    CaptureDeviceConfigurationControlPropertyExposureDuration,
-    CaptureDeviceConfigurationControlPropertyISO,
-    CaptureDeviceConfigurationControlPropertyZoomFactor
-} CaptureDeviceConfigurationControlProperty;
-
-typedef enum : NSUInteger {
-    CaptureDeviceConfigurationControlValueTorchLevel,
-    CaptureDeviceConfigurationControlValueLensPosition,
-    CaptureDeviceConfigurationControlValueExposureDuration,
-    CaptureDeviceConfigurationControlValueISO,
-    CaptureDeviceConfigurationControlValueZoomFactor
-} CaptureDeviceConfigurationControlValue;
-
-typedef enum : NSUInteger {
-    CaptureDeviceConfigurationControlPropertyFocusCurrent,
-    CaptureDeviceConfigurationControlPropertyFocusNearest,
-    CaptureDeviceConfigurationControlPropertyFocusNext
-} CaptureDeviceConfigurationControlPropertyFocus;
-
-typedef enum : NSUInteger {
-    CaptureDeviceConfigurationControlCenterOffsetDirectionRight,
-    CaptureDeviceConfigurationControlCenterOffsetDirectionLeft,
-    CaptureDeviceConfigurationControlCenterOffsetDirectionNone
-} CaptureDeviceConfigurationControlCenterOffsetDirection;
-
-typedef enum : NSUInteger {
-    CaptureDeviceConfigurationControlHorizontalScrollingDirectionRight,
-    CaptureDeviceConfigurationControlHorizontalScrollingDirectionLeft,
-    CaptureDeviceConfigurationControlHorizontalScrollingDirectionNone
-} CaptureDeviceConfigurationControlHorizontalScrollingDirection;
+#import "RadialLayout.h"
 
 @interface ViewController ()
 {
@@ -69,12 +25,26 @@ typedef enum : NSUInteger {
     UIButton * (^ButtonForCaptureDeviceConfigurationControlProperty)(CaptureDeviceConfigurationControlProperty);
 }
 
+@property (nonatomic, assign) NSInteger cellCount;
+@property (nonatomic, strong) UIButton * (^ButtonForCaptureDeviceConfigurationControlProperty)(CaptureDeviceConfigurationControlProperty);
+@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+
+//@property (nonatomic, strong) CoverFlowStyleLayout *coverFlowLayout;
+@property (nonatomic, strong) RadialLayout *radialLayout;
+
+@property (nonatomic, assign) BOOL firstTime;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    _coverFlowLayout = [[CoverFlowStyleLayout alloc] init];
+    _radialLayout = [[RadialLayout alloc] init];
+    
+    _cellCount = 5;
     
     [captureSession = [[AVCaptureSession alloc] init] setSessionPreset:([captureSession canSetSessionPreset:AVCaptureSessionPreset3840x2160]) ? AVCaptureSessionPreset3840x2160 : AVCaptureSessionPreset1920x1080];
     [captureSession beginConfiguration];
@@ -94,11 +64,17 @@ typedef enum : NSUInteger {
     [self.collectionView setAllowsSelection:TRUE];
     [self.collectionView setAllowsMultipleSelection:FALSE];
     
-    ButtonForCaptureDeviceConfigurationControlProperty = ^ (NSArray<UIButton *> * buttons) {
+    _ButtonForCaptureDeviceConfigurationControlProperty = ^ (NSArray<UIButton *> * buttons) {
         return ^ UIButton * (CaptureDeviceConfigurationControlProperty control_property) {
             return [buttons objectAtIndex:control_property];
         };
     }(@[self.torchLevelButton, self.lensPositionButton, self.exposureDurationButton, self.ISOButton, self.zoomFactorButton]);
+    
+    [self.radialControlsCollectionView registerClass:[PropertyCollectionViewCell class] forCellWithReuseIdentifier:@"PropertyCollectionViewCellReuseID"];
+    [self.radialControlsCollectionView setCollectionViewLayout:_radialLayout animated:YES];
+    [self.collectionView.collectionViewLayout performSelector:@selector(invalidateLayout) withObject:nil afterDelay:0.4f];
+    
+    _firstTime = YES;
 }
 
 
@@ -140,45 +116,17 @@ typedef enum : NSUInteger {
     return inset;
 }
 
-
-static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDeviceConfigurationControlProperty) = ^ NSString * (CaptureDeviceConfigurationControlProperty control_property) {
-    switch (control_property) {
-        case CaptureDeviceConfigurationControlPropertyTorchLevel: {
-            return @"bolt.circle";
-            break;
-        }
-        case CaptureDeviceConfigurationControlPropertyLensPosition: {
-            return @"viewfinder.circle";
-            break;
-        }
-        case CaptureDeviceConfigurationControlPropertyExposureDuration: {
-            return @"timer";
-            break;
-        }
-        case CaptureDeviceConfigurationControlPropertyISO: {
-            return @"camera.aperture";
-            break;
-        }
-        case CaptureDeviceConfigurationControlPropertyZoomFactor: {
-            return @"magnifyingglass.circle";
-            break;
-        }
-        default:
-            return @"questionmark.circle";
-            break;
-    }
-};
-
 - (__kindof PropertyCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    PropertyCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CollectionViewCellReuseID" forIndexPath:indexPath];
-    [cell setCaptureDeviceConfigurationPropertyButton:ButtonForCaptureDeviceConfigurationControlProperty(indexPath.item)];
+    PropertyCollectionViewCell * cell;
+    [cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PropertyCollectionViewCellReuseID" forIndexPath:indexPath] setTag:indexPath.item];
+    [cell setReusableButtonWithCaptureDeviceConfigurationControlForProperty:cell.tag usingValueControl:self.valueScrollView];
     
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%@", ([ButtonForCaptureDeviceConfigurationControlProperty(indexPath.item) isHighlighted] && [ButtonForCaptureDeviceConfigurationControlProperty(indexPath.item) isSelected]) ? @"ActiveState" : @"InactiveState");
-    [(PropertyCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath] setCaptureDeviceConfigurationPropertyButtonActiveState:TRUE];
+//    [(PropertyCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath] setCaptureDeviceConfigurationPropertyButtonActiveState:TRUE];
 }
 
 - (IBAction)configureCaptureDeviceProperty:(UIButton *)sender forEvent:(UIEvent *)event {
@@ -308,7 +256,7 @@ static NSString * (^ImageForCaptureDeviceConfigurationControlProperty)(CaptureDe
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView.tag == CaptureDeviceConfigurationControlTypeValue)
+    if (scrollView.tag == CaptureDeviceConfigurationControlTypeValueScrollView)
         if ((scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating))
             configureCameraProperty(scrollView.contentOffset.x);
 }

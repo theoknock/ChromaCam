@@ -7,25 +7,34 @@
 
 #import "PropertyCollectionViewCell.h"
 
+@interface PropertyCollectionViewCell ()
+{
+    CaptureDeviceConfigurationPropertyReusableButton * captureDeviceConfigurationPropertyReusableButton;
+}
+
+@end
+
 @implementation PropertyCollectionViewCell
 
-@synthesize captureDeviceConfigurationPropertyButton;
+- (void)setReusableButtonWithCaptureDeviceConfigurationControlForProperty:(CaptureDeviceConfigurationControlProperty)captureDeviceConfigurationControlProperty usingValueControl:(typeof(UIControl *))valueControl {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [captureDeviceConfigurationPropertyReusableButton = [[CaptureDeviceConfigurationPropertyReusableButton alloc] initWithCaptureDeviceConfigurationControlProperty:self.tag] setValueControl:valueControl];
+    [self.contentView addSubview:captureDeviceConfigurationPropertyReusableButton]; //[[CaptureDeviceConfigurationPropertyReusableButton alloc] initWithCaptureDeviceConfigurationControlProperty:self.tag]];
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+    if (!(self = [super initWithFrame:frame])) return nil;
+    
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    return self;
+}
 
 - (void)prepareForReuse {
     [super prepareForReuse];
-    [captureDeviceConfigurationPropertyButton removeFromSuperview];
-    captureDeviceConfigurationPropertyButton = nil;
-}
-
-- (void)setCaptureDeviceConfigurationPropertyButton:(UIButton *)captureDeviceConfigurationPropertyButton {
-    self->captureDeviceConfigurationPropertyButton = captureDeviceConfigurationPropertyButton;
-    [self.contentView addSubview:self->captureDeviceConfigurationPropertyButton];
-}
-
-- (void)setCaptureDeviceConfigurationPropertyButtonActiveState:(BOOL)activeState {
-    [captureDeviceConfigurationPropertyButton setHighlighted:activeState];
-    [captureDeviceConfigurationPropertyButton setSelected:activeState];
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [captureDeviceConfigurationPropertyReusableButton removeFromSuperview];
+    captureDeviceConfigurationPropertyReusableButton = nil;
 }
 
 @end

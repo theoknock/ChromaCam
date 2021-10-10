@@ -90,5 +90,10 @@
     return targetOffset;
 }
 
+- (CGSize)itemSize {
+    CGSize cellSize = CGSizeMake(self.collectionView.bounds.size.width / 5.0f, self.collectionView.bounds.size.height);
+    
+    return cellSize;
+}
 
 @end

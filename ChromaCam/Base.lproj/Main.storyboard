@@ -20,9 +20,34 @@
                         <subviews>
                             <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-bU-dhr" userLabel="Capture Video Preview">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <subviews>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9a7-uv-xNS" userLabel="Radial Controls Collection View">
+                                        <rect key="frame" x="0.0" y="490.5" width="414" height="245.5"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <collectionViewLayout key="collectionViewLayout" id="CEE-Kh-p1h" customClass="RadialLayout"/>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PropertyCollectionViewCellReuseID" id="lG3-QK-blK" userLabel="Radial Controls Collection View Cell" customClass="PropertyCollectionViewCell">
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="iba-DF-Etl">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </collectionViewCellContentView>
+                                            </collectionViewCell>
+                                        </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="Vkk-zE-HFM" id="6Sq-Wg-0Xe"/>
+                                            <outlet property="delegate" destination="Vkk-zE-HFM" id="9l6-KE-kzZ"/>
+                                        </connections>
+                                    </collectionView>
+                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="9a7-uv-xNS" firstAttribute="width" secondItem="0kB-bU-dhr" secondAttribute="width" id="TUF-Mn-WvG"/>
+                                    <constraint firstItem="9a7-uv-xNS" firstAttribute="bottom" secondItem="0kB-bU-dhr" secondAttribute="bottom" id="ddN-BI-8KX"/>
                                     <constraint firstAttribute="width" secondItem="0kB-bU-dhr" secondAttribute="height" multiplier="9:16" id="nEo-i9-wcK"/>
+                                    <constraint firstItem="9a7-uv-xNS" firstAttribute="trailing" secondItem="0kB-bU-dhr" secondAttribute="trailing" id="pej-bz-lhS"/>
+                                    <constraint firstItem="9a7-uv-xNS" firstAttribute="height" secondItem="0kB-bU-dhr" secondAttribute="height" multiplier="1/3" id="xby-Nb-nKU"/>
                                 </constraints>
                             </view>
                             <view opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yjl-ex-C71" userLabel="Control View">
@@ -38,7 +63,7 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionViewCellReuseID" id="yNv-Yw-ipb" customClass="PropertyCollectionViewCell">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PropertyCollectionViewCellReuseID" id="yNv-Yw-ipb" customClass="PropertyCollectionViewCell">
                                                 <rect key="frame" x="0.0" y="-32.5" width="128" height="128"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="74r-2A-rY4">
@@ -85,7 +110,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="CKk-vt-fuL" firstAttribute="width" secondItem="Yjl-ex-C71" secondAttribute="width" id="7IL-a1-UkI"/>
-                                    <constraint firstItem="CKk-vt-fuL" firstAttribute="bottom" secondItem="Yjl-ex-C71" secondAttribute="centerY" id="Hbi-E5-WXv"/>
+                                    <constraint firstItem="CKk-vt-fuL" firstAttribute="bottom" secondItem="Yjl-ex-C71" secondAttribute="bottom" id="Hbi-E5-WXv"/>
                                     <constraint firstItem="l4j-o2-yms" firstAttribute="centerX" secondItem="Yjl-ex-C71" secondAttribute="centerX" id="RJK-oc-3a2"/>
                                     <constraint firstItem="CKk-vt-fuL" firstAttribute="top" secondItem="Yjl-ex-C71" secondAttribute="top" id="WZM-ho-ZTU"/>
                                     <constraint firstItem="l4j-o2-yms" firstAttribute="top" secondItem="Yjl-ex-C71" secondAttribute="centerY" id="ZsZ-Sj-NkU"/>
@@ -124,6 +149,7 @@
                         <outlet property="collectionView" destination="CKk-vt-fuL" id="0s9-2J-x5t"/>
                         <outlet property="exposureDurationButton" destination="BK5-66-DHN" id="XVf-Xk-O9j"/>
                         <outlet property="lensPositionButton" destination="Q0d-rR-pNV" id="JFh-j0-kg6"/>
+                        <outlet property="radialControlsCollectionView" destination="9a7-uv-xNS" id="C8J-iQ-G0a"/>
                         <outlet property="torchLevelButton" destination="ta3-vl-tBP" id="CHT-5W-wKq"/>
                         <outlet property="valueContentView" destination="AUn-31-wbz" id="9d3-Tn-v1s"/>
                         <outlet property="valueScrollView" destination="l4j-o2-yms" id="CzL-za-8gb"/>
@@ -136,7 +162,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WEk-wX-jiD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="ta3-vl-tBP" userLabel="Torch Level Button">
+                <button opaque="NO" contentMode="scaleToFill" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" id="ta3-vl-tBP" userLabel="Torch Level Button">
                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

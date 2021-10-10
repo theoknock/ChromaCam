@@ -12,7 +12,7 @@
 #import "CoverLayout.h"
 #import "PropertyCollectionViewCell.h"
 
-@interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDataSourcePrefetching>
+@interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView * captureVideoPreview;
 @property (weak, nonatomic) IBOutlet UIButton *captureDeviceConfigurationPropertyButton;
@@ -31,9 +31,22 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *valueScrollView;
 @property (weak, nonatomic) IBOutlet ValueScrollViewContentView *valueContentView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+
+@property (assign, nonatomic) NSUInteger numberOfItems;
+@property (assign, nonatomic) NSIndexPath * activeIndexPath;
+@property (assign, nonatomic) NSMutableArray * variableHeights;
+
+
 @property (weak, nonatomic) IBOutlet CoverLayout *cellLayout;
 @property (strong, nonatomic) IBOutlet UIButton *testButton;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *CaptureDevicePropertyConfigurationButtons;
+
+// Radial Controls
+@property (weak, nonatomic) IBOutlet UICollectionView *radialControlsCollectionView;
+
+
+
+
 
 @end
 

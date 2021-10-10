@@ -6,14 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CaptureDeviceConfigurationPropertyReusableButton.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PropertyCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic) UIButton * captureDeviceConfigurationPropertyButton;
-//- (void)setCaptureDeviceConfigurationPropertyButton:(UIButton * _Nonnull * _Nonnull)button;
-- (void)setCaptureDeviceConfigurationPropertyButtonActiveState:(BOOL)activeState;
+- (void)setReusableButtonWithCaptureDeviceConfigurationControlForProperty:(CaptureDeviceConfigurationControlProperty)captureDeviceConfigurationControlProperty usingValueControl:(typeof(UIControl *))valueControl;
 
 @end
 

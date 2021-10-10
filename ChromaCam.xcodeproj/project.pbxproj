@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B917F533271395D6009868A5 /* RadialLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B917F531271395D6009868A5 /* RadialLayout.m */; };
+		B91BEC8527126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B91BEC8427126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.m */; };
+		B975EF182713251700474AC1 /* UIControl+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = B975EF172713251600474AC1 /* UIControl+Blocks.m */; };
 		B9CE504B2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CE504A2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m */; };
 		B9CE504E2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = B9CE504D2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c */; };
 		B9E2CF8326FFB2D7008D617E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B9E2CF8226FFB2D7008D617E /* AppDelegate.m */; };
@@ -25,6 +28,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B917F531271395D6009868A5 /* RadialLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadialLayout.m; sourceTree = "<group>"; };
+		B917F532271395D6009868A5 /* RadialLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadialLayout.h; sourceTree = "<group>"; };
+		B91BEC8327126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CaptureDeviceConfigurationPropertyReusableButton.h; path = ChromaCam/CaptureDeviceConfigurationPropertyReusableButton.h; sourceTree = "<group>"; };
+		B91BEC8427126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CaptureDeviceConfigurationPropertyReusableButton.m; path = ChromaCam/CaptureDeviceConfigurationPropertyReusableButton.m; sourceTree = "<group>"; wrapsLines = 0; };
+		B91BEC8627127298004A92B9 /* CaptureDeviceConfigurationPropertyResources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptureDeviceConfigurationPropertyResources.h; sourceTree = "<group>"; };
+		B975EF162713251600474AC1 /* UIControl+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+Blocks.h"; sourceTree = "<group>"; };
+		B975EF172713251600474AC1 /* UIControl+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+Blocks.m"; sourceTree = "<group>"; };
 		B9CE50492707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+AVCaptureVideoPreviewLayer.h"; sourceTree = "<group>"; };
 		B9CE504A2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+AVCaptureVideoPreviewLayer.m"; sourceTree = "<group>"; };
 		B9CE504C2707D5E600FCD024 /* CaptureSessionConfigurationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureSessionConfigurationQueue.h; sourceTree = "<group>"; };
@@ -65,6 +75,11 @@
 		B9E2CF7526FFB2D7008D617E = {
 			isa = PBXGroup;
 			children = (
+				B91BEC8627127298004A92B9 /* CaptureDeviceConfigurationPropertyResources.h */,
+				B91BEC8327126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.h */,
+				B91BEC8427126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.m */,
+				B975EF162713251600474AC1 /* UIControl+Blocks.h */,
+				B975EF172713251600474AC1 /* UIControl+Blocks.m */,
 				B9E3F3782710A5B5007B762A /* ValueScrollViewContentView.h */,
 				B9E3F3772710A5B5007B762A /* ValueScrollViewContentView.m */,
 				B9E3F3752710A5B5007B762A /* ValueScrollViewContentViewLayerContent.h */,
@@ -85,12 +100,18 @@
 		B9E2CF8026FFB2D7008D617E /* ChromaCam */ = {
 			isa = PBXGroup;
 			children = (
+				B9E2CF8F26FFB2D9008D617E /* LaunchScreen.storyboard */,
+				B9E2CF9326FFB2D9008D617E /* main.m */,
 				B9E2CF8126FFB2D7008D617E /* AppDelegate.h */,
 				B9E2CF8226FFB2D7008D617E /* AppDelegate.m */,
 				B9E2CF8426FFB2D7008D617E /* SceneDelegate.h */,
 				B9E2CF8526FFB2D7008D617E /* SceneDelegate.m */,
 				B9E2CF8726FFB2D7008D617E /* ViewController.h */,
 				B9E2CF8826FFB2D7008D617E /* ViewController.m */,
+				B917F532271395D6009868A5 /* RadialLayout.h */,
+				B917F531271395D6009868A5 /* RadialLayout.m */,
+				B9E2CF8D26FFB2D9008D617E /* Assets.xcassets */,
+				B9E2CF8A26FFB2D7008D617E /* Main.storyboard */,
 				B9E74128271217DF0060056C /* PropertyCollectionViewCell.h */,
 				B9E74129271217DF0060056C /* PropertyCollectionViewCell.m */,
 				B9E74125271206670060056C /* CoverLayout.h */,
@@ -99,11 +120,7 @@
 				B9CE504A2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m */,
 				B9CE504C2707D5E600FCD024 /* CaptureSessionConfigurationQueue.h */,
 				B9CE504D2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c */,
-				B9E2CF8D26FFB2D9008D617E /* Assets.xcassets */,
 				B9E2CF9226FFB2D9008D617E /* Info.plist */,
-				B9E2CF9326FFB2D9008D617E /* main.m */,
-				B9E2CF8A26FFB2D7008D617E /* Main.storyboard */,
-				B9E2CF8F26FFB2D9008D617E /* LaunchScreen.storyboard */,
 			);
 			path = ChromaCam;
 			sourceTree = "<group>";
@@ -181,14 +198,17 @@
 				B9E3F3792710A5B5007B762A /* ValueScrollViewContentViewLayerContent.h in Sources */,
 				B9E3F37A2710A5B5007B762A /* ValueScrollViewContentViewLayerContent.m in Sources */,
 				B9E3F37B2710A5B5007B762A /* ValueScrollViewContentView.m in Sources */,
+				B917F533271395D6009868A5 /* RadialLayout.m in Sources */,
 				B9E3F37C2710A5B5007B762A /* ValueScrollViewContentView.h in Sources */,
 				B9E2CF8926FFB2D7008D617E /* ViewController.m in Sources */,
 				B9E74127271206670060056C /* CoverLayout.m in Sources */,
 				B9E2CF8326FFB2D7008D617E /* AppDelegate.m in Sources */,
 				B9CE504E2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c in Sources */,
 				B9CE504B2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m in Sources */,
+				B975EF182713251700474AC1 /* UIControl+Blocks.m in Sources */,
 				B9E2CF9426FFB2D9008D617E /* main.m in Sources */,
 				B9E2CF8626FFB2D7008D617E /* SceneDelegate.m in Sources */,
+				B91BEC8527126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.m in Sources */,
 				B9E7412A271217DF0060056C /* PropertyCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
