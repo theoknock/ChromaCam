@@ -1,0 +1,1 @@
+Resize control view to the size of the entire screen; add container views for each type of controls in up to three sizes: 1) the remaining space underneath the video preview; 2) the video preview; and, 3) the entire screen.

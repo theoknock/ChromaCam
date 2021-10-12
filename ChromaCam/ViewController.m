@@ -61,6 +61,8 @@
     [captureSession commitConfiguration];
     [captureSession startRunning];
     
+//    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"PropertyCollectionViewCellReuseID"];
+    
     [self.collectionView setAllowsSelection:TRUE];
     [self.collectionView setAllowsMultipleSelection:FALSE];
     
@@ -88,88 +90,33 @@
     return 5;
 }
 
-//- (PropertyCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-//
-//    PropertyCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cellID" forIndexPath:indexPath];
-//
-//
-//    return cell;
-//}
-
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    
-    return CGSizeMake(collectionView.bounds.size.width / 5, collectionView.bounds.size.height);
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    
-    
-    
-    //((UICollectionViewFlowLayout *)collectionViewLayout).itemSize
-    
-//    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)collectionViewLayout;
-//    CGFloat leftInsetValue = (collectionView.frame.size.width - flowLayout.itemSize.width)/2.0f;
-    CGFloat leftInsetValue = (self.collectionView.frame.size.width - self.cellLayout.itemSize.width) / 2.0f;
-    UIEdgeInsets inset = UIEdgeInsetsMake(0, leftInsetValue, 0, leftInsetValue);
-    
-    return inset;
-}
-
-- (__kindof PropertyCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    PropertyCollectionViewCell * cell;
-    [cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PropertyCollectionViewCellReuseID" forIndexPath:indexPath] setTag:indexPath.item];
-    [cell setReusableButtonWithCaptureDeviceConfigurationControlForProperty:cell.tag usingValueControl:self.valueScrollView];
-    
-    return cell;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%@", ([ButtonForCaptureDeviceConfigurationControlProperty(indexPath.item) isHighlighted] && [ButtonForCaptureDeviceConfigurationControlProperty(indexPath.item) isSelected]) ? @"ActiveState" : @"InactiveState");
-//    [(PropertyCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath] setCaptureDeviceConfigurationPropertyButtonActiveState:TRUE];
-}
-
-- (IBAction)configureCaptureDeviceProperty:(UIButton *)sender forEvent:(UIEvent *)event {
-    CaptureDeviceConfigurationControlProperty sender_control_property = (CaptureDeviceConfigurationControlProperty)sender.tag;
-    
-    
+- (void)configureCaptureDeviceForProperty:(CaptureDeviceConfigurationControlProperty)captureDeviceConfigurationControlProperty {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [UIView animateWithDuration:0.25 animations:^{
         [self.valueScrollView setAlpha:0.0];
-        
-//        for (CaptureDeviceConfigurationControlProperty control_property = CaptureDeviceConfigurationControlPropertyTorchLevel; control_property <= CaptureDeviceConfigurationControlPropertyZoomFactor; control_property++) {
-//            BOOL changeState = (sender_control_property == control_property);
-//            [ButtonForCaptureDeviceConfigurationControlProperty(control_property) setSelected:changeState];
-//            [ButtonForCaptureDeviceConfigurationControlProperty(control_property) setHighlighted:changeState];
-//        }
-        
-        [ButtonForCaptureDeviceConfigurationControlProperty(CaptureDeviceConfigurationControlPropertyTorchLevel) setSelected:TRUE];
-        [ButtonForCaptureDeviceConfigurationControlProperty(CaptureDeviceConfigurationControlPropertyTorchLevel) setHighlighted:TRUE];
-        
-//        NSIndexPath * selectedIndexPath = [NSIndexPath indexPathForItem:CaptureDeviceConfigurationControlPropertyTorchLevel inSection:0];
-//        [(PropertyCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:selectedIndexPath] setCaptureDeviceConfigurationPropertyButtonActiveState:FALSE];
-        
-        
-        
     } completion:^(BOOL finished) {
         [captureDevice unlockForConfiguration];
         
         void(^cameraPropertyConfiguration)(float) = nil;
-        switch (sender_control_property) {
+        switch (captureDeviceConfigurationControlProperty) {
             case CaptureDeviceConfigurationControlPropertyTorchLevel: {
-                cameraPropertyConfiguration = ^ (UIScrollView * valueScrollView, AVCaptureDevice * cd, float old_value, float old_min, float old_max) {
-                    CGPoint scrollViewContentOffset = CGPointMake(old_value * CGRectGetWidth(valueScrollView.bounds), valueScrollView.contentOffset.y);
-                    [valueScrollView setContentOffset:scrollViewContentOffset animated:TRUE];
+                cameraPropertyConfiguration = ^ (UIScrollView * value_control, AVCaptureDevice * capture_device) {
+                    float property_value = [capture_device torchLevel];
+                    float property_min   = 0.0;
+                    float property_max   = 1.0;
+                    CGPoint controlContentOffset = CGPointMake(property_value * CGRectGetWidth(value_control.bounds), value_control.contentOffset.y);
+                    [value_control setContentOffset:controlContentOffset animated:TRUE];
                     
                     return ^ void (float offset) {
-                        float new_value = MAX(old_min, MIN(scale(offset, 0.0, CGRectGetWidth(valueScrollView.bounds), old_min, old_max), old_max));
+                        float new_value = MAX(property_min, MIN(scale(offset, 0.0, CGRectGetWidth(value_control.bounds), property_min, property_max), property_max));
                         if (new_value != 0.0 && ([[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateCritical && [[NSProcessInfo processInfo] thermalState] != NSProcessInfoThermalStateSerious))
-                            [cd setTorchModeOnWithLevel:new_value error:nil];
+                            [capture_device setTorchModeOnWithLevel:new_value error:nil];
                         else
-                            [cd setTorchMode:AVCaptureTorchModeOff];
+                            [capture_device setTorchMode:AVCaptureTorchModeOff];
                         
-                        [(ValueScrollViewContentViewLayerContent *)self.valueContentView.layer setValue:normalize(new_value, old_min, old_max)];
+                        [(ValueScrollViewContentViewLayerContent *)self.valueContentView.layer setValue:normalize(new_value, property_min, property_max)];
                     };
-                }(self.valueScrollView, captureDevice, [captureDevice torchLevel], 0.0, 1.0);
+                }(self.valueScrollView, captureDevice);
                 break;
             }
             case CaptureDeviceConfigurationControlPropertyLensPosition: {
@@ -236,6 +183,7 @@
             }
             default:
                 break;
+        
         }
         
         configureCameraProperty = ^ (void(^cameraPropertySetter)(float)) {
@@ -256,9 +204,17 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView.tag == CaptureDeviceConfigurationControlTypeValueScrollView)
+//    if (scrollView.tag == CaptureDeviceConfigurationControlTypeValueScrollView)
         if ((scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating))
-            configureCameraProperty(scrollView.contentOffset.x);
+            if (configureCameraProperty != nil) configureCameraProperty(scrollView.contentOffset.x);
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self.valueContentView;
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 //- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {

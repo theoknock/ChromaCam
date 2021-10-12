@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithCaptureDeviceConfigurationControlProperty:(CaptureDeviceConfigurationControlProperty)captureDeviceConfigurationControlProperty;
 
 @property (copy, nonatomic, setter=setConfigureCaptureDeviceProperty:) void(^ConfigureCaptureDeviceProperty)(float property_value);
-@property (strong, nonatomic, setter=setValueControl:) typeof(UIControl *) valueControl;
 
 @end
 

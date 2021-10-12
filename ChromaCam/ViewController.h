@@ -11,8 +11,9 @@
 #import "ValueScrollViewContentView.h"
 #import "CoverLayout.h"
 #import "PropertyCollectionViewCell.h"
+#import "CaptureDeviceConfigurationPropertyResources.h"
 
-@interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView * captureVideoPreview;
 @property (weak, nonatomic) IBOutlet UIButton *captureDeviceConfigurationPropertyButton;
@@ -44,7 +45,7 @@
 // Radial Controls
 @property (weak, nonatomic) IBOutlet UICollectionView *radialControlsCollectionView;
 
-
+- (void)configureCaptureDeviceForProperty:(CaptureDeviceConfigurationControlProperty)captureDeviceConfigurationControlProperty;
 
 
 

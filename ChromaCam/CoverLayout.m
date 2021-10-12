@@ -15,55 +15,35 @@
     return YES;
 }
 
-- (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {
+- (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {    
+    __autoreleasing NSArray<UICollectionViewLayoutAttributes *> * collectionViewLayoutAttributes;
+    [self performSelector:@selector(changeLayoutAttributes:) withObject:[collectionViewLayoutAttributes = [[NSArray alloc] initWithArray:[super layoutAttributesForElementsInRect:rect] copyItems:TRUE] self]];
     
-    NSArray *originalAttributes = [super layoutAttributesForElementsInRect:rect];
-    
-    NSMutableArray *changedAttributes = [[NSMutableArray alloc] init];
-    
-    for (UICollectionViewLayoutAttributes *attribute in originalAttributes) {
+    return (NSArray<UICollectionViewLayoutAttributes *> *)collectionViewLayoutAttributes;
+}
+
+- (void)changeLayoutAttributes:(NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributes {
+    for (UICollectionViewLayoutAttributes * attribute in layoutAttributes) {
+        CGFloat actualXOffset = (self.collectionView.bounds.size.width / 2.0) + self.collectionView.contentOffset.x;
+        CGFloat maxDistance = self.itemSize.width + self.minimumLineSpacing;
+        CGFloat distance = MIN(fabs(actualXOffset -  attribute.center.x), maxDistance);
         
-        UICollectionViewLayoutAttributes *finishedAttribute  = [attribute copy];
+        CGFloat ratio = (maxDistance - distance) / maxDistance;
         
+        CGFloat scale = (ratio * 0.5f) + 1.0f;
         
-        //속성의 변화를 준다.
-        [self changedAttribute:finishedAttribute];
+        CGFloat alpha = (ratio * 0.5f) + 0.5f;
         
-        [changedAttributes addObject:finishedAttribute];
+        attribute.alpha = alpha;
         
+        attribute.transform3D = CATransform3DScale(CATransform3DIdentity, scale, scale, 1);
+        attribute.zIndex = 10 * alpha;
     }
-    
-    return changedAttributes;
 }
 
-- (void)changedAttribute:(UICollectionViewLayoutAttributes *)attribute {
-    
-    
-    CGFloat collectionViewCenter = self.collectionView.bounds.size.width / 2.0f;
-    
-    CGFloat contentXOffset = self.collectionView.contentOffset.x;
-    
-    CGFloat actualXOffset = collectionViewCenter + contentXOffset;
- 
-    CGFloat maxDistance = self.itemSize.width + self.minimumLineSpacing;
-    
-    CGFloat distance = MIN(fabs(actualXOffset -  attribute.center.x), maxDistance);
-    
-    CGFloat ratio = (maxDistance - distance) / maxDistance;
-    
-    CGFloat scale = (ratio * 0.5f) + 1.0f;
-    
-    CGFloat alpha = (ratio * 0.5f) + 0.5f;
-    
-    attribute.alpha = alpha;
-    
-    attribute.transform3D = CATransform3DScale(CATransform3DIdentity, scale, scale, 1);
-    attribute.zIndex = 10 * alpha;
-}
-
-- (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity {
-    
-    CGFloat actualContentOffset = proposedContentOffset.x + (self.collectionView.frame.size.width / 2.0f);
+- (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity
+{
+    CGFloat actualContentOffset = proposedContentOffset.x + (self.collectionView.bounds.size.width / 2.0f);
     
     NSArray *attributeArray = [self layoutAttributesForElementsInRect:self.collectionView.bounds];
     
@@ -85,7 +65,7 @@
     }];
     
     CGFloat resultOffset = ((UICollectionViewLayoutAttributes *)resultArray.firstObject).center.x;
-    CGPoint targetOffset = CGPointMake(resultOffset - (self.collectionView.frame.size.width / 2.0f), proposedContentOffset.y);
+    CGPoint targetOffset = CGPointMake(resultOffset - (self.collectionView.bounds.size.width / 2.0f), proposedContentOffset.y);
     
     return targetOffset;
 }

@@ -11,12 +11,81 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreText/CoreText.h>
 
+//static NSParagraphStyle * (^textLayerParagraphStyle)(void) = ^ NSParagraphStyle * (void) {
+//    NSMutableParagraphStyle * centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+//    centerAlignedParagraphStyle.alignment = NSTextAlignmentCenter;
+//
+//    return centerAlignedParagraphStyle;
+//};
+
+static float(^jkl)(void) = ^ float {
+    return 2;
+};
+
+static NSParagraphStyle * (^textLayerParagraphStyle)(NSTextAlignment) = ^ NSParagraphStyle * (NSTextAlignment text_alignment) {
+    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+
+    return (NSParagraphStyle *)paragraphStyle;
+};
+
+static NSDictionary * (^textLayerTextAttributes)(UIColor *color, UIFont * font, NSParagraphStyle * paragraph_style) = ^ NSDictionary * (UIColor *color, UIFont * font, NSParagraphStyle * paragraph_style) {
+NSDictionary * attributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],
+                                              NSFontAttributeName:[UIFont systemFontOfSize:14.0 weight:UIFontWeightLight],
+                                              NSParagraphStyleAttributeName:paragraph_style};
+    
+    return attributes;
+};
+
+
+
+
+//
+//^ (float value) {
+//    rertu
+//    return ^ (float value) {
+//        ^ (NSDictionary * string_attributes) {
+//            return ^ NSAttributedString * (float value) {
+//                NSAttributedString * attributed_string = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.2f", value] attributes:string_attributes];
+//                return attributed_string;
+//            };
+//        }(textLayerTextAttributes([UIColor whiteColor], [UIFont systemFontOfSize:14.0 weight:UIFontWeightLight], textLayerParagraphStyle(NSTextAlignmentCenter)));
+//    };
+//};
+
+//static void (^set_text_layer_value)(float) = ^ (NSParagraphStyle * textLayerParagraphStyle) {
+//    return ^ (float value) {
+//        // perform text layer update
+//    };
+//}(^ NSParagraphStyle * (void) {
+//    NSMutableParagraphStyle * centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+//    centerAlignedParagraphStyle.alignment = NSTextAlignmentCenter;
+//
+//    return centerAlignedParagraphStyle;
+//});
 
 @implementation ValueScrollViewContentViewLayerContent
 {
     CATextLayer *scaleSliderValueTextLayer;
     CATextLayer *scaleSliderMinimumValueTextLayer;
     CATextLayer *scaleSliderMaximumValueTextLayer;
+    NSParagraphStyle * textLayerParagraphStyle;
+    NSDictionary * textLayerParagraphStyleTextAttributes;
+    NSMutableAttributedString * textLayerAttributedString;
+}
+
+// GOAL: NSAttributedString * (^string)(float);
+static NSAttributedString * (^(^(^asdf)(NSDictionary *))(NSString *))(float) = ^ (NSDictionary * dictionary) {
+    return ^ (NSString * string) {
+        return ^ NSAttributedString * (float value) {
+            return [NSAttributedString new];
+        };
+    };
+};
+
+- (void)test_block {
+    // GOAL: asdf(1.0)
+    NSAttributedString * string = asdf([NSDictionary new])([NSString new])(1.0);
 }
 
 - (instancetype)init
@@ -54,9 +123,9 @@
 - (void)setText:(NSString *)valueString forLayer:(CATextLayer *)textLayer frameWithOffset:(CGFloat)originX {
     [textLayer setContentsScale:[[UIScreen mainScreen] nativeScale]];
     [textLayer setRasterizationScale:[[UIScreen mainScreen] nativeScale]];
-    NSMutableParagraphStyle *centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+    NSMutableParagraphStyle * centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     centerAlignedParagraphStyle.alignment = NSTextAlignmentCenter;
-    NSDictionary *centerAlignedTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],
+    NSDictionary * centerAlignedTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],
                                                   NSFontAttributeName:[UIFont systemFontOfSize:14.0 weight:UIFontWeightLight],
                                                   NSParagraphStyleAttributeName:centerAlignedParagraphStyle};
     

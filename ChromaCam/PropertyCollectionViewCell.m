@@ -16,25 +16,14 @@
 
 @implementation PropertyCollectionViewCell
 
-- (void)setReusableButtonWithCaptureDeviceConfigurationControlForProperty:(CaptureDeviceConfigurationControlProperty)captureDeviceConfigurationControlProperty usingValueControl:(typeof(UIControl *))valueControl {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    [captureDeviceConfigurationPropertyReusableButton = [[CaptureDeviceConfigurationPropertyReusableButton alloc] initWithCaptureDeviceConfigurationControlProperty:self.tag] setValueControl:valueControl];
-    [self.contentView addSubview:captureDeviceConfigurationPropertyReusableButton]; //[[CaptureDeviceConfigurationPropertyReusableButton alloc] initWithCaptureDeviceConfigurationControlProperty:self.tag]];
-}
+@dynamic tag;
 
-- (id)initWithFrame:(CGRect)frame
-{
-    if (!(self = [super initWithFrame:frame])) return nil;
-    
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    
-    return self;
-}
-
-- (void)prepareForReuse {
-    [super prepareForReuse];
-    [captureDeviceConfigurationPropertyReusableButton removeFromSuperview];
-    captureDeviceConfigurationPropertyReusableButton = nil;
+- (void)setTag:(NSInteger)tag {
+    [super setTag:tag];
+    if (!captureDeviceConfigurationPropertyReusableButton) {
+        [captureDeviceConfigurationPropertyReusableButton = [[CaptureDeviceConfigurationPropertyReusableButton alloc] initWithCaptureDeviceConfigurationControlProperty:self.tag] setFrame:CGRectMake(0.0, 0.0, 42.0, 42.0)];
+        [self.contentView addSubview:captureDeviceConfigurationPropertyReusableButton]; //[[CaptureDeviceConfigurationPropertyReusableButton alloc] initWithCaptureDeviceConfigurationControlProperty:self.tag]];
+    }
 }
 
 @end

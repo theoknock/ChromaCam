@@ -8,10 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		B917F533271395D6009868A5 /* RadialLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B917F531271395D6009868A5 /* RadialLayout.m */; };
+		B917F53A2713BAE7009868A5 /* RadialControlCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B917F5382713BAE7009868A5 /* RadialControlCollectionViewController.m */; };
+		B917F53B2713BAE7009868A5 /* RadialControlCollectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B917F5392713BAE7009868A5 /* RadialControlCollectionViewController.xib */; };
+		B917F53D2713BEF8009868A5 /* ProjectToDo in Resources */ = {isa = PBXBuildFile; fileRef = B917F53C2713BEF8009868A5 /* ProjectToDo */; };
 		B91BEC8527126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B91BEC8427126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.m */; };
 		B975EF182713251700474AC1 /* UIControl+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = B975EF172713251600474AC1 /* UIControl+Blocks.m */; };
 		B9CE504B2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CE504A2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m */; };
 		B9CE504E2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = B9CE504D2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c */; };
+		B9CE7221271516BD007551BB /* PropertyControlHorizontalFlowCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CE7220271516BD007551BB /* PropertyControlHorizontalFlowCollectionViewController.m */; };
 		B9E2CF8326FFB2D7008D617E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B9E2CF8226FFB2D7008D617E /* AppDelegate.m */; };
 		B9E2CF8626FFB2D7008D617E /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B9E2CF8526FFB2D7008D617E /* SceneDelegate.m */; };
 		B9E2CF8926FFB2D7008D617E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9E2CF8826FFB2D7008D617E /* ViewController.m */; };
@@ -30,6 +34,10 @@
 /* Begin PBXFileReference section */
 		B917F531271395D6009868A5 /* RadialLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadialLayout.m; sourceTree = "<group>"; };
 		B917F532271395D6009868A5 /* RadialLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadialLayout.h; sourceTree = "<group>"; };
+		B917F5372713BAE7009868A5 /* RadialControlCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RadialControlCollectionViewController.h; sourceTree = "<group>"; };
+		B917F5382713BAE7009868A5 /* RadialControlCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RadialControlCollectionViewController.m; sourceTree = "<group>"; };
+		B917F5392713BAE7009868A5 /* RadialControlCollectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RadialControlCollectionViewController.xib; sourceTree = "<group>"; };
+		B917F53C2713BEF8009868A5 /* ProjectToDo */ = {isa = PBXFileReference; lastKnownFileType = text; path = ProjectToDo; sourceTree = "<group>"; };
 		B91BEC8327126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CaptureDeviceConfigurationPropertyReusableButton.h; path = ChromaCam/CaptureDeviceConfigurationPropertyReusableButton.h; sourceTree = "<group>"; };
 		B91BEC8427126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CaptureDeviceConfigurationPropertyReusableButton.m; path = ChromaCam/CaptureDeviceConfigurationPropertyReusableButton.m; sourceTree = "<group>"; wrapsLines = 0; };
 		B91BEC8627127298004A92B9 /* CaptureDeviceConfigurationPropertyResources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptureDeviceConfigurationPropertyResources.h; sourceTree = "<group>"; };
@@ -39,6 +47,8 @@
 		B9CE504A2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+AVCaptureVideoPreviewLayer.m"; sourceTree = "<group>"; };
 		B9CE504C2707D5E600FCD024 /* CaptureSessionConfigurationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureSessionConfigurationQueue.h; sourceTree = "<group>"; };
 		B9CE504D2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CaptureSessionConfigurationQueue.c; sourceTree = "<group>"; };
+		B9CE721F271516BD007551BB /* PropertyControlHorizontalFlowCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropertyControlHorizontalFlowCollectionViewController.h; sourceTree = "<group>"; };
+		B9CE7220271516BD007551BB /* PropertyControlHorizontalFlowCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PropertyControlHorizontalFlowCollectionViewController.m; sourceTree = "<group>"; wrapsLines = 0; };
 		B9E2CF7E26FFB2D7008D617E /* ChromaCam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChromaCam.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9E2CF8126FFB2D7008D617E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B9E2CF8226FFB2D7008D617E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -106,12 +116,18 @@
 				B9E2CF8226FFB2D7008D617E /* AppDelegate.m */,
 				B9E2CF8426FFB2D7008D617E /* SceneDelegate.h */,
 				B9E2CF8526FFB2D7008D617E /* SceneDelegate.m */,
+				B917F53C2713BEF8009868A5 /* ProjectToDo */,
 				B9E2CF8726FFB2D7008D617E /* ViewController.h */,
 				B9E2CF8826FFB2D7008D617E /* ViewController.m */,
 				B917F532271395D6009868A5 /* RadialLayout.h */,
 				B917F531271395D6009868A5 /* RadialLayout.m */,
 				B9E2CF8D26FFB2D9008D617E /* Assets.xcassets */,
 				B9E2CF8A26FFB2D7008D617E /* Main.storyboard */,
+				B917F5372713BAE7009868A5 /* RadialControlCollectionViewController.h */,
+				B917F5382713BAE7009868A5 /* RadialControlCollectionViewController.m */,
+				B9CE721F271516BD007551BB /* PropertyControlHorizontalFlowCollectionViewController.h */,
+				B9CE7220271516BD007551BB /* PropertyControlHorizontalFlowCollectionViewController.m */,
+				B917F5392713BAE7009868A5 /* RadialControlCollectionViewController.xib */,
 				B9E74128271217DF0060056C /* PropertyCollectionViewCell.h */,
 				B9E74129271217DF0060056C /* PropertyCollectionViewCell.m */,
 				B9E74125271206670060056C /* CoverLayout.h */,
@@ -185,6 +201,8 @@
 				B9E2CF9126FFB2D9008D617E /* LaunchScreen.storyboard in Resources */,
 				B9E2CF8E26FFB2D9008D617E /* Assets.xcassets in Resources */,
 				B9E2CF8C26FFB2D7008D617E /* Main.storyboard in Resources */,
+				B917F53D2713BEF8009868A5 /* ProjectToDo in Resources */,
+				B917F53B2713BAE7009868A5 /* RadialControlCollectionViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,10 +220,12 @@
 				B9E3F37C2710A5B5007B762A /* ValueScrollViewContentView.h in Sources */,
 				B9E2CF8926FFB2D7008D617E /* ViewController.m in Sources */,
 				B9E74127271206670060056C /* CoverLayout.m in Sources */,
+				B9CE7221271516BD007551BB /* PropertyControlHorizontalFlowCollectionViewController.m in Sources */,
 				B9E2CF8326FFB2D7008D617E /* AppDelegate.m in Sources */,
 				B9CE504E2707D5E600FCD024 /* CaptureSessionConfigurationQueue.c in Sources */,
 				B9CE504B2707BA7900FCD024 /* UIView+AVCaptureVideoPreviewLayer.m in Sources */,
 				B975EF182713251700474AC1 /* UIControl+Blocks.m in Sources */,
+				B917F53A2713BAE7009868A5 /* RadialControlCollectionViewController.m in Sources */,
 				B9E2CF9426FFB2D9008D617E /* main.m in Sources */,
 				B9E2CF8626FFB2D7008D617E /* SceneDelegate.m in Sources */,
 				B91BEC8527126452004A92B9 /* CaptureDeviceConfigurationPropertyReusableButton.m in Sources */,

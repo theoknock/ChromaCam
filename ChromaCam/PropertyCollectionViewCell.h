@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PropertyCollectionViewCell : UICollectionViewCell
 
-- (void)setReusableButtonWithCaptureDeviceConfigurationControlForProperty:(CaptureDeviceConfigurationControlProperty)captureDeviceConfigurationControlProperty usingValueControl:(typeof(UIControl *))valueControl;
+@property(nonatomic) NSInteger tag;
 
 @end
 

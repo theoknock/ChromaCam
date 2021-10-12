@@ -13,12 +13,14 @@
     NSInteger tag_mod;
 }
 
-@synthesize valueControl = _valueControl, ConfigureCaptureDeviceProperty = _ConfigureCaptureDeviceProperty;
+@synthesize ConfigureCaptureDeviceProperty = _ConfigureCaptureDeviceProperty;
 
 - (instancetype)initWithCaptureDeviceConfigurationControlProperty:(CaptureDeviceConfigurationControlProperty)captureDeviceConfigurationControlProperty {
     if (self == [super init]) {
-
-        [self setFrame:CGRectMake(0.0, 0.0, 82.8, 63.0)];
+        // View
+//        [self setTranslatesAutoresizingMaskIntoConstraints:TRUE];
+//        [self setFrame:CGRectMake(0.0, 0.0, 42.0, 42.0)];
+//        [self setClipsToBounds:FALSE];
         
         // Tag
         [self setTag:captureDeviceConfigurationControlProperty];
@@ -40,11 +42,6 @@
         [self setTitleShadowColor:[UIColor clearColor] forState:UIControlStateNormal];
         [self setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateSelected];
         
-        
-        
-        // View layout
-        [self setTranslatesAutoresizingMaskIntoConstraints:TRUE];
-        
         // Target-Action-Event
         
     }
@@ -52,10 +49,10 @@
     return self;
 }
 
-- (void)setValueControl:(typeof([UIControl class]))valueControl {
-    NSLog(@"[valueControl class] == %@", [[valueControl class] description]);
-    _valueControl = (typeof([valueControl class]))valueControl;
-}
+//- (void)setValueControl:(typeof([UIControl class]))valueControl {
+//    NSLog(@"[valueControl class] == %@", [[valueControl class] description]);
+//    _valueControl = (typeof([valueControl class]))valueControl;
+//}
 
 // If this doesn't work, try passing the initial arguments to this method (see related OneNote)
 - (void)setConfigureCaptureDeviceProperty:(void (^)(float))ConfigureCaptureDeviceProperty {
