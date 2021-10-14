@@ -118,7 +118,7 @@ static NSAttributedString * (^(^(^attributed_text_with_extended_attributes)(NSDi
 
 - (void)setValue:(CGFloat)value {
     [self setText:[NSString stringWithFormat:@"%.2f", value] forLayer:scaleSliderValueTextLayer frameWithOffset:(CGRectGetMaxX([[UIScreen mainScreen] bounds]) -  CGRectGetMinX([[UIScreen mainScreen] bounds])) * value];
-    printf("value == %f", value);
+//    printf("value == %f", value);
 //    [self setNeedsDisplay];
 //    [self setNeedsDisplayOnBoundsChange:YES];
 }
