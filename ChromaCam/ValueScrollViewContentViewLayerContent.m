@@ -11,86 +11,89 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreText/CoreText.h>
 
-//static NSParagraphStyle * (^textLayerParagraphStyle)(void) = ^ NSParagraphStyle * (void) {
-//    NSMutableParagraphStyle * centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-//    centerAlignedParagraphStyle.alignment = NSTextAlignmentCenter;
-//
-//    return centerAlignedParagraphStyle;
-//};
-
-static float(^jkl)(void) = ^ float {
-    return 2;
-};
-
-static NSParagraphStyle * (^textLayerParagraphStyle)(NSTextAlignment) = ^ NSParagraphStyle * (NSTextAlignment text_alignment) {
-    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-
-    return (NSParagraphStyle *)paragraphStyle;
-};
-
-static NSDictionary * (^textLayerTextAttributes)(UIColor *color, UIFont * font, NSParagraphStyle * paragraph_style) = ^ NSDictionary * (UIColor *color, UIFont * font, NSParagraphStyle * paragraph_style) {
-NSDictionary * attributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],
-                                              NSFontAttributeName:[UIFont systemFontOfSize:14.0 weight:UIFontWeightLight],
-                                              NSParagraphStyleAttributeName:paragraph_style};
-    
-    return attributes;
-};
-
-
-
-
-//
-//^ (float value) {
-//    rertu
-//    return ^ (float value) {
-//        ^ (NSDictionary * string_attributes) {
-//            return ^ NSAttributedString * (float value) {
-//                NSAttributedString * attributed_string = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.2f", value] attributes:string_attributes];
-//                return attributed_string;
-//            };
-//        }(textLayerTextAttributes([UIColor whiteColor], [UIFont systemFontOfSize:14.0 weight:UIFontWeightLight], textLayerParagraphStyle(NSTextAlignmentCenter)));
-//    };
-//};
-
-//static void (^set_text_layer_value)(float) = ^ (NSParagraphStyle * textLayerParagraphStyle) {
-//    return ^ (float value) {
-//        // perform text layer update
-//    };
-//}(^ NSParagraphStyle * (void) {
-//    NSMutableParagraphStyle * centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-//    centerAlignedParagraphStyle.alignment = NSTextAlignmentCenter;
-//
-//    return centerAlignedParagraphStyle;
-//});
+typedef NSParagraphStyle * (^ParagraphStyle)(void);
+typedef NSDictionary * (^CharacterStyle)(NSParagraphStyle *);
+typedef NSAttributedString * (^AttributedText)(NSString *);
 
 @implementation ValueScrollViewContentViewLayerContent
 {
     CATextLayer *scaleSliderValueTextLayer;
     CATextLayer *scaleSliderMinimumValueTextLayer;
     CATextLayer *scaleSliderMaximumValueTextLayer;
-    NSParagraphStyle * textLayerParagraphStyle;
-    NSDictionary * textLayerParagraphStyleTextAttributes;
-    NSMutableAttributedString * textLayerAttributedString;
+    AttributedText attributed_text;
 }
 
-// GOAL: NSAttributedString * (^string)(float);
-static NSAttributedString * (^(^(^asdf)(NSDictionary *))(NSString *))(float) = ^ (NSDictionary * dictionary) {
-    return ^ (NSString * string) {
-        return ^ NSAttributedString * (float value) {
-            return [NSAttributedString new];
+NSDictionary * (^text_attributes)(UIColor *, UIFont *, NSTextAlignment) = ^ (UIColor * color, UIFont * font, NSTextAlignment alignment) {
+    return ^ (NSParagraphStyle * style) {
+        return @{NSForegroundColorAttributeName:color,
+                 NSFontAttributeName:font,
+                 NSParagraphStyleAttributeName:style};
+    }(^ {
+        NSMutableParagraphStyle * paragraphStyle;
+        [paragraphStyle = [[NSMutableParagraphStyle alloc] init] setAlignment:alignment];
+        return (NSParagraphStyle *)paragraphStyle;
+    }());
+};
+
+// UIFontTextStyle string-to-attributed-string factories to use UIFontTextStyle
+static NSAttributedString * (^(^attributed_string_using_font_text_style_body)(void))(NSString *) = ^ (void) {
+    return ^ (NSDictionary * attributes) {
+        return ^ NSAttributedString * (NSString * string) {
+            return [[NSAttributedString alloc] initWithString:string attributes:attributes];
+        };
+    }(^ (UIColor * color, UIFont * font, NSTextAlignment alignment) {
+        return ^ (NSParagraphStyle * text_style) {
+            return @{NSForegroundColorAttributeName:color,
+                     NSFontAttributeName:font,
+                     NSParagraphStyleAttributeName:text_style};
+        }(^ NSParagraphStyle * (void) {
+            NSMutableParagraphStyle * paragraphStyle;
+            [paragraphStyle = [[NSMutableParagraphStyle alloc] init] setAlignment:alignment];
+            return (NSParagraphStyle *)paragraphStyle;
+        }());
+    }([UIColor whiteColor],
+      [UIFont systemFontOfSize:14.0 weight:UIFontWeightLight],
+      NSTextAlignmentCenter));
+};
+
+static NSAttributedString * (^(^(^attributed_text_with_extended_attributes)(NSDictionary *))(NSParagraphStyle *))(NSString *) = ^ (NSDictionary * text_attributes) {
+    return ^ (NSParagraphStyle * text_style) {
+        return ^ NSAttributedString * (NSString * string) {
+            return [[NSAttributedString alloc] initWithString:string attributes:text_attributes];
         };
     };
 };
 
-- (void)test_block {
-    // GOAL: asdf(1.0)
-    NSAttributedString * string = asdf([NSDictionary new])([NSString new])(1.0);
-}
-
 - (instancetype)init
 {
-    if (self == [super init]) {        
+    if (self == [super init]) {
+        attributed_text =  ^ {
+            ParagraphStyle paragraph_style = ^ (NSTextAlignment alignment) {                                  // add custom parameters here
+                return ^ NSParagraphStyle * (void) {
+//                    printf("\nParagraphStyle\t");                                                           // uncomment for proof of optimal memory allocation
+                    return [NSParagraphStyle new];
+                };
+            }(NSTextAlignmentCenter);
+            
+            CharacterStyle character_style = ^ (UIColor * color, UIFont * font, NSTextAlignment alignment) {  // add custom parameters here
+                return ^ NSDictionary * (NSParagraphStyle * ps) {
+//                    printf("CharacterStyle\t");                                                             // uncomment for proof of optimal memory allocation
+                    return @{NSForegroundColorAttributeName:color,
+                             NSFontAttributeName:font,
+                             NSParagraphStyleAttributeName:ps};
+                };
+            }([UIColor whiteColor],
+              [UIFont systemFontOfSize:14.0 weight:UIFontWeightLight],
+              NSTextAlignmentCenter);
+            
+            return ^ (NSDictionary * attributes) {
+                return ^ NSAttributedString * (NSString * text) {
+//                    printf("AttributedText\n");                                                            // uncomment for proof of optimal resource usage
+                    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
+                };
+            }(character_style(paragraph_style()));
+        }();
+        
         scaleSliderValueTextLayer = [CATextLayer new];
         [self attributesForTextLayer:scaleSliderValueTextLayer];
         [self addSublayer:scaleSliderValueTextLayer];
@@ -115,21 +118,13 @@ static NSAttributedString * (^(^(^asdf)(NSDictionary *))(NSString *))(float) = ^
 
 - (void)setValue:(CGFloat)value {
     [self setText:[NSString stringWithFormat:@"%.2f", value] forLayer:scaleSliderValueTextLayer frameWithOffset:(CGRectGetMaxX([[UIScreen mainScreen] bounds]) -  CGRectGetMinX([[UIScreen mainScreen] bounds])) * value];
-    
-    [self setNeedsDisplay];
-    [self setNeedsDisplayOnBoundsChange:YES];
+    printf("value == %f", value);
+//    [self setNeedsDisplay];
+//    [self setNeedsDisplayOnBoundsChange:YES];
 }
 
 - (void)setText:(NSString *)valueString forLayer:(CATextLayer *)textLayer frameWithOffset:(CGFloat)originX {
-    [textLayer setContentsScale:[[UIScreen mainScreen] nativeScale]];
-    [textLayer setRasterizationScale:[[UIScreen mainScreen] nativeScale]];
-    NSMutableParagraphStyle * centerAlignedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-    centerAlignedParagraphStyle.alignment = NSTextAlignmentCenter;
-    NSDictionary * centerAlignedTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],
-                                                  NSFontAttributeName:[UIFont systemFontOfSize:14.0 weight:UIFontWeightLight],
-                                                  NSParagraphStyleAttributeName:centerAlignedParagraphStyle};
-    
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:valueString attributes:centerAlignedTextAttributes];
+    NSAttributedString *attributedString = attributed_text(valueString);
     ((CATextLayer *)textLayer).string = attributedString;
 
     CGSize textLayerframeSize = [self suggestFrameSizeWithConstraints:self.frame.size forAttributedString:attributedString];
@@ -138,12 +133,15 @@ static NSAttributedString * (^(^(^asdf)(NSDictionary *))(NSString *))(float) = ^
     [textLayer display];
 }
 
+
 - (void)attributesForTextLayer:(CATextLayer *)textLayer
 {
     [(CATextLayer *)textLayer setAllowsFontSubpixelQuantization:TRUE];
     [(CATextLayer *)textLayer setOpaque:FALSE];
     [(CATextLayer *)textLayer setAlignmentMode:kCAAlignmentCenter];
     [(CATextLayer *)textLayer setWrapped:FALSE];
+    [(CATextLayer *)textLayer setContentsScale:[[UIScreen mainScreen] nativeScale]];
+    [(CATextLayer *)textLayer setRasterizationScale:[[UIScreen mainScreen] nativeScale]];
 }
 
 - (CGSize)suggestFrameSizeWithConstraints:(CGSize)size forAttributedString:(NSAttributedString *)attributedString
